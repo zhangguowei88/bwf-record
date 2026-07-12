@@ -1,0 +1,160 @@
+<!-- pages/record/record.wxml — 记录页 -->
+<view class="container safe-bottom">
+
+  <!-- 记一笔按钮 -->
+  <button class="btn btn-primary btn-block record-btn" bindtap="openSheet">
+    + 记一笔
+  </button>
+
+  <!-- 本周进度 -->
+  <view class="card week-card">
+    <text class="week-title">本周打球</text>
+    <view class="week-row">
+      <text class="week-num">{{weekCount}}</text>
+      <text class="week-goal">/ {{weeklyGoal}} 场</text>
+    </view>
+    <view class="progress-track">
+      <view class="progress-fill" style="width: {{weekCount >= weeklyGoal ? 100 : (weekCount / weeklyGoal * 100)}}%;"></view>
+    </view>
+  </view>
+
+  <!-- 历史记录 -->
+  <view class="card" wx:if="{{list.length}}">
+    <view class="card-title">
+      <text>历史记录</text>
+      <text class="text-light">{{list.length}} 条</text>
+    </view>
+
+    <view wx:for="{{list}}" wx:key="_id" class="history-item">
+      <view class="history-left">
+        <text class="history-date">{{item.record_date}}</text>
+        <text class="history-duration">{{item.duration_text}}</text>
+        <view class="history-ops">
+          <text class="history-op" data-id="{{item._id}}" catchtap="editRecord">编辑</text>
+          <text class="history-op history-op-del" data-id="{{item._id}}" catchtap="deleteRecord">删除</text>
+        </view>
+      </view>
+      <view class="history-main">
+        <view class="history-chips">
+          <text class="chip chip-intensity-{{item.intensity}}">{{item.intensity_label}}</text>
+          <text class="chip chip-feeling-{{item.feeling}}">{{item.feeling_label}}</text>
+          <text wx:if="{{item.is_shared !== false}}" class="chip chip-shared">已分享</text>
+        </view>
+        <view class="history-meta">
+          <text wx:if="{{item.venue}}" class="text-light">{{item.venue}} · </text>
+          <text wx:if="{{item.sore_text}}" class="text-sore">不适：{{item.sore_text}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="card empty-card" wx:if="{{!loading && !list.length}}">
+    <view class="empty-icon">🏸</view>
+    <text class="empty-text">还没有记录</text>
+    <text class="text-light">打完一场，点上面记一笔</text>
+  </view>
+
+  <view wx:if="{{hasMore}}" class="loading-more text-light">加载中...</view>
+  <view wx:if="{{!loading && list.length > 0 && !hasMore}}" class="loading-more text-light">— 没有更多了 —</view>
+</view>
+
+<!-- 记一笔弹窗 -->
+<view class="sheet-mask {{showSheet ? 'show' : ''}}" bindtap="closeSheet"></view>
+<view class="sheet {{showSheet ? 'show' : ''}}">
+  <view class="sheet-header">
+    <text class="sheet-title">{{editingId ? '编辑记录' : '记一笔'}}</text>
+    <text class="sheet-close" bindtap="closeSheet">✕</text>
+  </view>
+
+  <view class="sheet-body">
+    <!-- 日期 -->
+    <view class="form-item">
+      <text class="form-label">日期</text>
+      <picker mode="date" value="{{form.record_date}}" bindchange="onDateChange">
+        <view class="picker-value">{{form.record_date}} <text class="picker-arrow">›</text></view>
+      </picker>
+    </view>
+
+    <!-- 时长 -->
+    <view class="form-item">
+      <text class="form-label">时长</text>
+      <view class="chip-row">
+        <view wx:for="{{durationOptions}}" wx:key="*this"
+          class="chip {{form.duration_min === item ? 'chip-active' : ''}}"
+          data-value="{{item}}" bindtap="selectDuration">
+          {{item < 60 ? item + '分' : (item / 60) + '小时'}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 强度 -->
+    <view class="form-item">
+      <text class="form-label">强度</text>
+      <view class="chip-row">
+        <view wx:for="{{intensityOptions}}" wx:key="value"
+          class="chip {{form.intensity === item.value ? 'chip-active' : ''}}"
+          data-value="{{item.value}}" bindtap="selectIntensity">
+          {{item.label}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 感受 -->
+    <view class="form-item">
+      <text class="form-label">身体感受</text>
+      <view class="chip-row">
+        <view wx:for="{{feelingOptions}}" wx:key="value"
+          class="chip {{form.feeling === item.value ? 'chip-active' : ''}}"
+          data-value="{{item.value}}" bindtap="selectFeeling">
+          {{item.label}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 不适部位（仅不适时） -->
+    <view class="form-item" wx:if="{{form.feeling === 3}}">
+      <text class="form-label">不适部位（可多选）</text>
+      <view class="chip-row">
+        <view wx:for="{{soreParts}}" wx:key="*this"
+          class="chip {{form.sore_parts.indexOf(item) >= 0 ? 'chip-active' : ''}}"
+          data-value="{{item}}" bindtap="toggleSore">
+          {{item}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 场地 -->
+    <view class="form-item">
+      <text class="form-label">场地（可选）</text>
+      <input class="form-input" value="{{form.venue}}" bindinput="onVenueInput" placeholder="如 奥体中心" />
+    </view>
+
+    <!-- 搭子 -->
+    <view class="form-item">
+      <text class="form-label">搭子（可选）</text>
+      <input class="form-input" value="{{form.partners}}" bindinput="onPartnersInput" placeholder="逗号分隔，如 老张,老李" />
+    </view>
+
+    <!-- 备注 -->
+    <view class="form-item">
+      <text class="form-label">备注（可选）</text>
+      <input class="form-input" value="{{form.note}}" bindinput="onNoteInput" placeholder="今天杀球感觉不错" />
+    </view>
+
+    <!-- 分享开关 -->
+    <view class="form-item share-item">
+      <view class="share-left">
+        <text class="form-label-inline">分享到球友圈</text>
+        <text class="form-hint text-light">球友能看到并点赞评论</text>
+      </view>
+      <switch checked="{{form.is_shared}}" bindchange="toggleShare" color="#10b981" />
+    </view>
+  </view>
+
+  <view class="sheet-footer">
+    <button class="btn btn-primary btn-block" bindtap="submit" loading="{{submitting}}" disabled="{{submitting}}">
+      保存
+    </button>
+  </view>
+</view>

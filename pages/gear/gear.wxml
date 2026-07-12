@@ -1,0 +1,61 @@
+<!-- pages/gear/gear.wxml — 装备指南 -->
+<view class="container safe-bottom">
+
+  <view class="guide-header">
+    <text class="guide-title">🏸 装备指南</text>
+    <text class="guide-sub text-light">球拍 · 球鞋 · 球 · 护具</text>
+  </view>
+
+  <view wx:for="{{sections}}" wx:key="key" class="card section-card">
+    <view class="section-head" data-key="{{item.key}}" bindtap="toggleSection">
+      <view class="section-head-left">
+        <text class="section-icon">{{item.icon}}</text>
+        <view class="section-head-info">
+          <text class="section-title">{{item.title}}</text>
+          <text class="section-desc text-light">{{item.desc}}</text>
+        </view>
+      </view>
+      <text class="section-arrow {{item.expanded ? 'expanded' : ''}}">›</text>
+    </view>
+
+    <view class="section-body" wx:if="{{item.expanded}}">
+      <view wx:for="{{item.chapters}}" wx:for-item="ch" wx:key="title" class="chapter">
+        <text class="chapter-title">{{ch.title}}</text>
+
+        <block wx:if="{{ch.points}}">
+          <view class="sub-block">
+            <text class="sub-title sub-title-points">选购要点</text>
+            <view class="chapter-list">
+              <view wx:for="{{ch.points}}" wx:for-item="line" wx:for-index="i" wx:key="i" class="chapter-line">
+                <text class="line-dot line-dot-points">·</text>
+                <text class="line-text">{{line}}</text>
+              </view>
+            </view>
+          </view>
+          <view class="sub-block" wx:if="{{ch.errors.length}}">
+            <text class="sub-title sub-title-errors">避坑</text>
+            <view class="chapter-list">
+              <view wx:for="{{ch.errors}}" wx:for-item="line" wx:for-index="i" wx:key="i" class="chapter-line">
+                <text class="line-dot line-dot-errors">✗</text>
+                <text class="line-text">{{line}}</text>
+              </view>
+            </view>
+          </view>
+          <view class="sub-block" wx:if="{{ch.tips.length}}">
+            <text class="sub-title sub-title-tips">建议</text>
+            <view class="chapter-list">
+              <view wx:for="{{ch.tips}}" wx:for-item="line" wx:for-index="i" wx:key="i" class="chapter-line">
+                <text class="line-dot line-dot-tips">✓</text>
+                <text class="line-text">{{line}}</text>
+              </view>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+  </view>
+
+  <view class="guide-footer text-light">
+    装备是辅助，动作规范和科学训练才是根本
+  </view>
+</view>

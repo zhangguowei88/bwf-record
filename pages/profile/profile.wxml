@@ -1,0 +1,168 @@
+<!-- pages/profile/profile.wxml — 我的 -->
+<view class="container safe-bottom" wx:if="{{profile}}">
+
+  <!-- 用户信息 + 等级 -->
+  <view class="card user-card" style="background: linear-gradient(135deg, {{profile.level_color}}10, {{profile.level_color}}04);">
+    <view class="user-info">
+      <button class="avatar-btn {{profile.avatar_url ? 'has-avatar' : ''}}" style="{{profile.avatar_url ? 'background-image: url(' + profile.avatar_url + ')' : ''}}" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <view wx:if="{{!profile.avatar_url}}" class="avatar {{profile.gender === 1 ? 'avatar-male' : 'avatar-female'}}">
+          <text>{{profile.gender === 1 ? '♂' : (profile.gender === 2 ? '♀' : '🏸')}}</text>
+        </view>
+      </button>
+      <view class="user-meta">
+        <input class="user-name user-name-input" type="nickname" value="{{profile.nick_name}}" placeholder="点此设置昵称" bindblur="saveNickFromBlur" />
+        <view class="user-tags">
+          <view class="user-tag" style="background: {{profile.level_color}}; color: #fff;">等级 {{profile.badminton_level}}</view>
+          <text class="user-sub text-sub">球龄 {{profile.play_age}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="auth-tip text-light">点头像授权微信头像 · 点昵称授权微信昵称</view>
+  </view>
+
+  <!-- 累计数据 -->
+  <view class="metrics-row">
+    <view class="metric">
+      <text class="metric-val">{{stats.total_count || 0}}</text>
+      <text class="metric-label">累计场次</text>
+    </view>
+    <view class="metric-divider"></view>
+    <view class="metric">
+      <text class="metric-val">{{stats.total_hours || 0}}</text>
+      <text class="metric-label">累计时长(时)</text>
+    </view>
+    <view class="metric-divider"></view>
+    <view class="metric">
+      <text class="metric-val">{{stats.month_count || 0}}</text>
+      <text class="metric-label">本月场次</text>
+    </view>
+  </view>
+
+  <!-- 我的水平 -->
+  <view class="card">
+    <view class="card-title">
+      <text>我的水平</text>
+      <text class="edit-link" bindtap="startEditLevel" wx:if="{{!editingLevel}}">调整 ›</text>
+    </view>
+
+    <block wx:if="{{!editingLevel}}">
+      <view class="level-current">
+        <view class="level-badge-lg" style="background: {{profile.level_color}};">
+          <text class="level-badge-num">{{profile.badminton_level}}</text>
+        </view>
+        <view class="level-current-info">
+          <text class="level-current-name">{{profile.level_name}}</text>
+          <text class="level-current-desc text-sub">{{profile.level_desc}}</text>
+          <text class="level-current-age text-light">球龄起点：{{profile.play_since}}</text>
+        </view>
+      </view>
+      <view class="level-next-tip" wx:if="{{profile.next_tip}}">
+        <text class="tip-icon">🎯</text>
+        <view class="tip-content">
+          <text class="tip-title">进阶方向</text>
+          <text class="tip-text text-sub">{{profile.next_tip}}</text>
+          <text class="tip-next text-light" wx:if="{{profile.next_level_name}}">下一级：{{profile.next_level_value}} {{profile.next_level_name}}</text>
+        </view>
+      </view>
+    </block>
+
+    <block wx:else>
+      <view class="form-item">
+        <text class="form-label">水平自评（中羽民间等级）</text>
+        <view class="level-grid">
+          <view wx:for="{{levelOptions}}" wx:key="value"
+            class="level-opt {{levelForm.badminton_level === item.value ? 'active' : ''}}"
+            data-value="{{item.value}}" bindtap="selectLevel">
+            <text class="level-opt-num">{{item.value}}</text>
+            <text class="level-opt-name">{{item.name}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="form-item">
+        <text class="form-label">球龄起点（年月）</text>
+        <picker mode="date" value="{{levelForm.play_since}}" fields="month" bindchange="onPlaySinceChange">
+          <view class="picker-value">{{levelForm.play_since}} <text class="picker-arrow">›</text></view>
+        </picker>
+      </view>
+      <view class="edit-actions">
+        <button class="btn btn-ghost edit-cancel" bindtap="cancelEditLevel">取消</button>
+        <button class="btn btn-primary edit-save" bindtap="saveLevel" loading="{{saving}}">保存</button>
+      </view>
+    </block>
+  </view>
+
+  <!-- 每周目标 -->
+  <view class="card">
+    <view class="card-title">
+      <text>每周目标</text>
+      <text class="edit-link" bindtap="startEditGoal" wx:if="{{!editingGoal}}">调整 ›</text>
+    </view>
+
+    <block wx:if="{{!editingGoal}}">
+      <view class="info-row">
+        <text class="info-label">每周打球场次</text>
+        <text class="info-value">{{profile.weekly_goal}} 场</text>
+      </view>
+    </block>
+
+    <block wx:else>
+      <view class="form-item">
+        <text class="form-label">每周目标场次</text>
+        <picker mode="selector" range="{{goalRange}}" value="{{goalForm.weekly_goal - 1}}" bindchange="onGoalChange">
+          <view class="picker-value">{{goalForm.weekly_goal}} 场 <text class="picker-arrow">›</text></view>
+        </picker>
+      </view>
+      <view class="edit-actions">
+        <button class="btn btn-ghost edit-cancel" bindtap="cancelEditGoal">取消</button>
+        <button class="btn btn-primary edit-save" bindtap="saveGoal">保存</button>
+      </view>
+    </block>
+  </view>
+
+  <!-- 个人档案 -->
+  <view class="card">
+    <view class="card-title">
+      <text>个人档案</text>
+      <text class="edit-link" bindtap="startEdit" wx:if="{{!editingProfile}}">编辑 ›</text>
+    </view>
+
+    <block wx:if="{{!editingProfile}}">
+      <view class="info-row"><text class="info-label">昵称</text><text class="info-value">{{profile.nick_name || '未设置'}}</text></view>
+      <view class="info-row"><text class="info-label">年龄</text><text class="info-value">{{profile.age}} 岁</text></view>
+      <view class="info-row"><text class="info-label">性别</text><text class="info-value">{{profile.gender_label}}</text></view>
+      <view class="info-row"><text class="info-label">身高</text><text class="info-value">{{profile.height_cm}} cm</text></view>
+      <view class="info-row"><text class="info-label">体重</text><text class="info-value">{{profile.weight_text}}</text></view>
+    </block>
+
+    <block wx:else>
+      <view class="form-item">
+        <text class="form-label">昵称</text>
+        <input class="form-input" type="nickname" value="{{editForm.nick_name}}" bindinput="onNickInput" placeholder="点击获取微信昵称或自定义" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">年龄</text>
+        <input class="form-input" type="number" value="{{editForm.age}}" bindinput="onAgeInput" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">性别</text>
+        <picker mode="selector" range="{{['男', '女']}}" value="{{editForm.gender === 2 ? 1 : 0}}" bindchange="onGenderChange">
+          <view class="picker-value">{{editForm.gender === 1 ? '男' : '女'}} <text class="picker-arrow">›</text></view>
+        </picker>
+      </view>
+      <view class="form-item">
+        <text class="form-label">身高（cm）</text>
+        <input class="form-input" type="number" value="{{editForm.height_cm}}" bindinput="onHeightInput" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">体重（kg）</text>
+        <input class="form-input" type="digit" value="{{editForm.weight_kg}}" bindinput="onWeightInput" />
+      </view>
+      <view class="edit-actions">
+        <button class="btn btn-ghost edit-cancel" bindtap="cancelEdit">取消</button>
+        <button class="btn btn-primary edit-save" bindtap="saveProfile">保存</button>
+      </view>
+    </block>
+  </view>
+
+  <view class="footer text-light">羽球手记 · 坚持比完美更重要</view>
+</view>

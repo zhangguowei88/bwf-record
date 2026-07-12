@@ -1,0 +1,130 @@
+/* pages/record/record.wxss — 记录页 */
+
+.record-btn { margin-bottom: 24rpx; }
+
+/* 本周进度卡 */
+.week-card { display: flex; flex-direction: column; gap: 16rpx; }
+.week-title { font-size: 28rpx; color: #6b7280; }
+.week-row { display: flex; align-items: baseline; gap: 8rpx; }
+.week-num { font-size: 56rpx; font-weight: 700; color: #10b981; line-height: 1; }
+.week-goal { font-size: 28rpx; color: #9ca3af; }
+.progress-track { width: 100%; height: 14rpx; background: #f0f1f3; border-radius: 8rpx; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #34d399, #10b981); border-radius: 8rpx; transition: width 0.3s; min-width: 8rpx; }
+
+/* 历史记录 */
+.history-item {
+  display: flex;
+  gap: 24rpx;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #f0f1f3;
+}
+.history-item:last-child { border-bottom: none; }
+.history-left { width: 140rpx; flex-shrink: 0; display: flex; flex-direction: column; gap: 6rpx; }
+.history-date { font-size: 26rpx; color: #6b7280; }
+.history-duration { font-size: 28rpx; font-weight: 600; color: #1f2937; }
+.history-ops { display: flex; gap: 16rpx; margin-top: 4rpx; }
+.history-op { font-size: 22rpx; color: #3b82f6; }
+.history-op-del { color: #ef4444; }
+.chip-shared { background: #ede9fe; color: #6d28d9; }
+.history-main { flex: 1; display: flex; flex-direction: column; gap: 10rpx; }
+.history-chips { display: flex; gap: 12rpx; }
+.history-meta { font-size: 24rpx; }
+.text-sore { color: #ef4444; }
+
+/* 通用 chip */
+.chip {
+  padding: 12rpx 28rpx;
+  border-radius: 32rpx;
+  background: #f3f4f6;
+  color: #4b5563;
+  font-size: 26rpx;
+}
+.chip-active { background: #d1fae5; color: #059669; font-weight: 600; }
+.chip-intensity-1 { background: #f3f4f6; color: #6b7280; }
+.chip-intensity-2 { background: #dbeafe; color: #1d4ed8; }
+.chip-intensity-3 { background: #fee2e2; color: #b91c1c; }
+.chip-feeling-1 { background: #d1fae5; color: #059669; }
+.chip-feeling-2 { background: #fef3c7; color: #b45309; }
+.chip-feeling-3 { background: #fee2e2; color: #b91c1c; }
+
+/* 空状态 */
+.empty-card { text-align: center; padding: 80rpx 0; }
+.empty-icon { font-size: 80rpx; margin-bottom: 16rpx; }
+.empty-text { font-size: 30rpx; color: #6b7280; display: block; margin-bottom: 8rpx; }
+
+.loading-more { text-align: center; padding: 32rpx; }
+
+/* ===== 底部弹窗 ===== */
+.sheet-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.25s;
+  z-index: 100;
+}
+.sheet-mask.show { opacity: 1; visibility: visible; }
+
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  border-radius: 32rpx 32rpx 0 0;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.3s;
+  z-index: 101;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.sheet.show { transform: translateY(0); }
+
+.sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 32rpx;
+  border-bottom: 1rpx solid #f0f1f3;
+  flex-shrink: 0;
+}
+.sheet-title { font-size: 32rpx; font-weight: 600; color: #1f2937; }
+.sheet-close { font-size: 36rpx; color: #9ca3af; padding: 0 8rpx; }
+
+.sheet-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12rpx 32rpx;
+}
+
+.sheet-footer {
+  padding: 20rpx 32rpx 32rpx;
+  border-top: 1rpx solid #f0f1f3;
+  flex-shrink: 0;
+}
+
+/* 表单 */
+.form-item { padding: 20rpx 0; border-bottom: 1rpx solid #f5f6f8; }
+.form-item:last-child { border-bottom: none; }
+.form-label { display: block; font-size: 26rpx; color: #6b7280; margin-bottom: 16rpx; }
+.form-input { font-size: 30rpx; color: #1f2937; padding: 8rpx 0; }
+.picker-value { display: flex; align-items: center; justify-content: space-between; font-size: 30rpx; color: #1f2937; font-weight: 500; }
+.picker-arrow { color: #9ca3af; }
+
+.chip-row { display: flex; flex-wrap: wrap; gap: 16rpx; }
+
+/* 分享开关 */
+.share-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.share-left { display: flex; flex-direction: column; gap: 6rpx; }
+.form-label-inline { font-size: 28rpx; color: #1f2937; font-weight: 500; }
+.form-hint { font-size: 22rpx; }

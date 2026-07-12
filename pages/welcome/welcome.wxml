@@ -1,0 +1,33 @@
+<!-- pages/welcome/welcome.wxml — 首次授权 -->
+<view class="welcome-page">
+  <view class="welcome-top">
+    <view class="welcome-logo">🏸</view>
+    <text class="welcome-title">羽球手记</text>
+    <text class="welcome-sub text-light">记录每一场打球，看清自己的成长</text>
+  </view>
+
+  <view class="auth-area">
+    <!-- 头像 -->
+    <button class="auth-avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+      <image wx:if="{{avatarUrl}}" class="auth-avatar-img" src="{{avatarUrl}}" mode="aspectFill" />
+      <view wx:else class="auth-avatar-default">
+        <text class="auth-avatar-plus">+</text>
+        <text class="auth-avatar-tip">设置头像</text>
+      </view>
+      <view wx:if="{{hasAvatar}}" class="auth-check">✓</view>
+    </button>
+
+    <!-- 昵称 -->
+    <view class="auth-nick-row">
+      <input class="auth-nick-input" type="nickname" value="{{nickName}}" bindinput="onNickInput" placeholder="点击设置昵称" />
+      <view wx:if="{{hasNick}}" class="auth-check auth-check-nick">✓</view>
+    </view>
+  </view>
+
+  <view class="auth-actions">
+    <button class="btn btn-primary btn-block auth-enter {{!canEnter ? 'btn-disabled' : ''}}" bindtap="enterApp" loading="{{uploading}}" disabled="{{uploading}}">
+      进入小程序
+    </button>
+    <text class="auth-skip text-light" bindtap="skip">稍后再说</text>
+  </view>
+</view>

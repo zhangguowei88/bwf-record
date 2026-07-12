@@ -1,0 +1,72 @@
+/* pages/guide/guide.wxss — 知识手册 */
+
+.guide-header {
+  padding: 16rpx 8rpx 28rpx;
+}
+.guide-title { font-size: 40rpx; font-weight: 700; color: #1f2937; display: block; margin-bottom: 8rpx; }
+.guide-sub { font-size: 26rpx; }
+
+/* 板块 */
+.section-card { padding: 0; overflow: hidden; }
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28rpx 32rpx;
+}
+.section-head-left { display: flex; align-items: center; gap: 20rpx; }
+.section-icon { font-size: 44rpx; }
+.section-head-info { display: flex; flex-direction: column; gap: 6rpx; }
+.section-title { font-size: 32rpx; font-weight: 600; color: #1f2937; }
+.section-desc { font-size: 24rpx; }
+.section-arrow {
+  font-size: 40rpx;
+  color: #9ca3af;
+  transition: transform 0.25s;
+}
+.section-arrow.expanded { transform: rotate(90deg); }
+
+.section-body { padding: 0 32rpx 28rpx; }
+
+/* 章节 */
+.chapter {
+  padding: 20rpx 0;
+  border-top: 1rpx solid #f5f6f8;
+}
+.chapter:first-child { border-top: none; }
+.chapter-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #10b981;
+  display: block;
+  margin-bottom: 14rpx;
+}
+.chapter-list { display: flex; flex-direction: column; gap: 10rpx; }
+.chapter-line { display: flex; gap: 10rpx; }
+.line-dot { color: #10b981; font-size: 26rpx; line-height: 1.6; flex-shrink: 0; }
+.line-text { font-size: 26rpx; color: #374151; line-height: 1.7; flex: 1; }
+
+/* 结构化子块（技术板块） */
+.sub-block { margin-bottom: 20rpx; }
+.sub-block:last-child { margin-bottom: 0; }
+.sub-title {
+  display: block;
+  font-size: 24rpx;
+  font-weight: 600;
+  margin-bottom: 10rpx;
+  padding-left: 12rpx;
+  border-left: 4rpx solid;
+}
+.sub-title-points { color: #059669; border-color: #10b981; }
+.sub-title-errors { color: #b91c1c; border-color: #ef4444; }
+.sub-title-tips { color: #1d4ed8; border-color: #3b82f6; }
+.line-dot-points { color: #10b981; }
+.line-dot-errors { color: #ef4444; }
+.line-dot-tips { color: #3b82f6; }
+
+.guide-footer {
+  text-align: center;
+  padding: 32rpx 16rpx;
+  font-size: 22rpx;
+  line-height: 1.6;
+}

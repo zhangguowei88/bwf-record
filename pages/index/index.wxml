@@ -1,0 +1,190 @@
+<!-- pages/index/index.wxml — 首页 -->
+<view class="container safe-bottom">
+
+  <view wx:if="{{loading}}" class="loading-wrap">
+    <view class="loading-spinner"></view>
+    <text class="text-light">加载中...</text>
+  </view>
+
+  <block wx:else>
+    <!-- 空状态引导 -->
+    <view wx:if="{{data.is_empty}}" class="card welcome-card">
+      <text class="welcome-icon">🏸</text>
+      <text class="welcome-title">欢迎来到羽球手记</text>
+      <text class="welcome-desc text-sub">记录每一场打球，看清自己的成长</text>
+      <view class="welcome-actions">
+        <button class="btn btn-ghost welcome-btn" bindtap="goProfileLevel">设置我的水平</button>
+        <button class="btn btn-primary welcome-btn" bindtap="goRecord">记第一场球</button>
+      </view>
+    </view>
+
+    <!-- 等级徽章 -->
+    <view class="card level-card" style="background: linear-gradient(135deg, {{data.level_color}}14, {{data.level_color}}06);">
+      <view class="level-left">
+        <view class="level-badge" style="background: {{data.level_color}};">
+          <text class="level-num">{{data.user.badminton_level}}</text>
+        </view>
+        <view class="level-info">
+          <text class="level-name">{{data.level_name}}</text>
+          <text class="level-age text-sub">球龄 {{data.play_age}}</text>
+        </view>
+      </view>
+      <view class="level-right">
+        <text class="text-light">当前等级</text>
+      </view>
+    </view>
+
+    <!-- 本周进度 -->
+    <view class="card">
+      <view class="card-title">
+        <text>本周打球</text>
+        <text class="text-light">目标 {{data.weekly_goal}} 场</text>
+      </view>
+      <view class="week-progress">
+        <view class="week-num-row">
+          <text class="week-num" style="color: {{data.week_progress_color}}">{{data.week_count}}</text>
+          <text class="week-divide">/ {{data.weekly_goal}} 场</text>
+          <view class="week-tag {{data.week_achieved ? 'tag-success' : 'tag-warn'}}">
+            {{data.week_achieved ? '已达标' : '进行中'}}
+          </view>
+        </view>
+        <view class="progress-track">
+          <view class="progress-fill" style="width: {{data.week_progress}}%; background: {{data.week_progress_color}};"></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 本月数据 -->
+    <view class="metrics-row">
+      <view class="metric">
+        <text class="metric-val">{{data.month_count}}</text>
+        <text class="metric-label">本月场次</text>
+      </view>
+      <view class="metric-divider"></view>
+      <view class="metric">
+        <text class="metric-val">{{data.month_hours_text}}</text>
+        <text class="metric-label">本月时长(时)</text>
+      </view>
+      <view class="metric-divider"></view>
+      <view class="metric">
+        <text class="metric-val">{{data.total_count}}</text>
+        <text class="metric-label">累计场次</text>
+      </view>
+    </view>
+
+    <!-- 智能提醒 -->
+    <view class="card advice-card">
+      <view class="card-title"><text>💡 智能提醒</text></view>
+      <text class="advice-text">{{data.advice}}</text>
+    </view>
+
+    <!-- 月度复盘 -->
+    <view class="card" wx:if="{{data.total_count > 0}}">
+      <view class="card-title">
+        <text>📊 本月复盘</text>
+        <text class="text-light">对比上月</text>
+      </view>
+      <view class="review-row">
+        <view class="review-item">
+          <text class="review-num">{{data.month_review.count}}</text>
+          <text class="review-label text-light">场次</text>
+          <text class="review-diff {{data.month_review.count_diff > 0 ? 'diff-up' : ''}} {{data.month_review.count_diff < 0 ? 'diff-down' : ''}}">
+            {{data.month_review.count_diff_text}}
+          </text>
+        </view>
+        <view class="review-item">
+          <text class="review-num">{{data.month_review.hours_text}}</text>
+          <text class="review-label text-light">时长(时)</text>
+          <text class="review-diff {{data.month_review.minutes_diff > 0 ? 'diff-up' : ''}} {{data.month_review.minutes_diff < 0 ? 'diff-down' : ''}}">
+            {{data.month_review.hours_diff_text}}
+          </text>
+        </view>
+        <view class="review-item">
+          <text class="review-num">{{data.month_review.top_intensity_text}}</text>
+          <text class="review-label text-light">主力强度</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 最近记录 -->
+    <view class="card" wx:if="{{data.recent.length}}">
+      <view class="card-title">
+        <text>最近 3 场</text>
+        <text class="see-all" bindtap="goRecord">全部 ›</text>
+      </view>
+      <view wx:for="{{data.recent}}" wx:key="_id" class="recent-item">
+        <view class="recent-date">
+          <text class="recent-day">{{item.record_date}}</text>
+        </view>
+        <view class="recent-main">
+          <view class="recent-row">
+            <text class="recent-duration">{{item.duration_text}}</text>
+            <text class="recent-chip chip-intensity-{{item.intensity}}">{{item.intensity_label}}</text>
+            <text class="recent-chip chip-feeling-{{item.feeling}}">{{item.feeling_label}}</text>
+          </view>
+          <text class="recent-sore text-light" wx:if="{{item.sore_text}}">不适：{{item.sore_text}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 快捷操作 -->
+    <button class="btn btn-primary btn-block" bindtap="goRecord">+ 记一笔</button>
+
+    <!-- 知识入口 -->
+    <view class="entry-row">
+      <view class="entry-card" bindtap="goFeed">
+        <text class="entry-icon">👥</text>
+        <view class="entry-info">
+          <text class="entry-title">球友圈</text>
+          <text class="entry-desc text-light">看球友动态 · 点赞交流</text>
+        </view>
+        <text class="entry-arrow">›</text>
+      </view>
+      <view class="entry-card" bindtap="goGuide">
+        <text class="entry-icon">📖</text>
+        <view class="entry-info">
+          <text class="entry-title">知识手册</text>
+          <text class="entry-desc text-light">规则 · 技术 · 防伤</text>
+        </view>
+        <text class="entry-arrow">›</text>
+      </view>
+      <view class="entry-card" bindtap="goGear">
+        <text class="entry-icon">🏸</text>
+        <view class="entry-info">
+          <text class="entry-title">装备指南</text>
+          <text class="entry-desc text-light">球拍 · 球鞋 · 护具</text>
+        </view>
+        <text class="entry-arrow">›</text>
+      </view>
+    </view>
+  </block>
+</view>
+
+<!-- 首次引导弹窗 -->
+<view class="sheet-mask {{showWelcome ? 'show' : ''}}" bindtap="skipWelcome" catchtouchmove="noop"></view>
+<view class="welcome-sheet {{showWelcome ? 'show' : ''}}" catchtouchmove="noop">
+  <view class="welcome-sheet-head">
+    <text class="welcome-sheet-title">🏸 你是什么水平？</text>
+    <text class="welcome-sheet-sub text-light">自评一下，方便约球和记录成长</text>
+  </view>
+
+  <scroll-view scroll-y class="welcome-level-list" catchtouchmove="noop">
+    <view wx:for="{{levelOptions}}" wx:key="value"
+      class="welcome-level-item {{welcomeLevel === item.value ? 'active' : ''}}"
+      data-value="{{item.value}}" bindtap="selectWelcomeLevel">
+      <view class="welcome-level-left">
+        <text class="welcome-level-num">{{item.value}}</text>
+        <view class="welcome-level-info">
+          <text class="welcome-level-name">{{item.name}}</text>
+          <text class="welcome-level-desc text-light">{{item.desc}}</text>
+        </view>
+      </view>
+      <text class="welcome-level-check" wx:if="{{welcomeLevel === item.value}}">✓</text>
+    </view>
+  </scroll-view>
+
+  <view class="welcome-sheet-foot">
+    <button class="btn btn-ghost welcome-skip" bindtap="skipWelcome">稍后</button>
+    <button class="btn btn-primary welcome-confirm" bindtap="submitWelcomeLevel" loading="{{savingLevel}}" disabled="{{savingLevel}}">确定</button>
+  </view>
+</view>

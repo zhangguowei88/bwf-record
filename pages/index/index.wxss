@@ -1,0 +1,199 @@
+/* pages/index/index.wxss — 首页 */
+
+.loading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 160rpx 0;
+}
+.loading-spinner {
+  width: 64rpx;
+  height: 64rpx;
+  border: 6rpx solid #e5e7eb;
+  border-top-color: #10b981;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 24rpx;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 等级徽章 */
+.level-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 36rpx 32rpx;
+}
+.level-left { display: flex; align-items: center; gap: 24rpx; }
+.level-badge {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.level-num { color: #fff; font-size: 44rpx; font-weight: 700; }
+.level-info { display: flex; flex-direction: column; gap: 6rpx; }
+.level-name { font-size: 34rpx; font-weight: 600; color: #1f2937; }
+.level-age { font-size: 24rpx; }
+.level-right { text-align: right; }
+
+/* 本周进度 */
+.week-progress { padding: 8rpx 0; }
+.week-num-row { display: flex; align-items: baseline; gap: 12rpx; margin-bottom: 24rpx; }
+.week-num { font-size: 64rpx; font-weight: 700; line-height: 1; }
+.week-divide { font-size: 28rpx; color: #9ca3af; }
+.progress-track {
+  width: 100%;
+  height: 16rpx;
+  background: #f0f1f3;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 8rpx;
+  transition: width 0.3s;
+  min-width: 8rpx;
+}
+
+/* 指标行 */
+.metrics-row {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 32rpx 0;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(16, 24, 40, 0.06);
+}
+.metric { flex: 1; text-align: center; display: flex; flex-direction: column; }
+.metric-val { font-size: 40rpx; font-weight: 700; color: #1f2937; }
+.metric-label { font-size: 22rpx; color: #9ca3af; margin-top: 8rpx; }
+.metric-divider { width: 1rpx; height: 60rpx; background: #e5e7eb; }
+
+/* 提醒 */
+.advice-card { }
+.advice-text { font-size: 28rpx; color: #374151; line-height: 1.8; }
+
+/* 月度复盘 */
+.review-row { display: flex; }
+.review-item { flex: 1; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6rpx; }
+.review-num { font-size: 40rpx; font-weight: 700; color: #1f2937; }
+.review-label { font-size: 22rpx; }
+.review-diff { font-size: 22rpx; color: #9ca3af; margin-top: 4rpx; }
+.diff-up { color: #10b981; }
+.diff-down { color: #ef4444; }
+
+/* 最近记录 */
+.see-all { font-size: 24rpx; color: #10b981; }
+.recent-item {
+  display: flex;
+  gap: 24rpx;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f1f3;
+}
+.recent-item:last-child { border-bottom: none; }
+.recent-date { width: 140rpx; flex-shrink: 0; }
+.recent-day { font-size: 26rpx; color: #6b7280; }
+.recent-main { flex: 1; }
+.recent-row { display: flex; align-items: center; gap: 12rpx; flex-wrap: wrap; }
+.recent-duration { font-size: 28rpx; font-weight: 500; color: #1f2937; }
+.recent-chip {
+  padding: 4rpx 16rpx;
+  border-radius: 16rpx;
+  font-size: 22rpx;
+}
+.chip-intensity-1 { background: #f3f4f6; color: #6b7280; }
+.chip-intensity-2 { background: #dbeafe; color: #1d4ed8; }
+.chip-intensity-3 { background: #fee2e2; color: #b91c1c; }
+.chip-feeling-1 { background: #d1fae5; color: #059669; }
+.chip-feeling-2 { background: #fef3c7; color: #b45309; }
+.chip-feeling-3 { background: #fee2e2; color: #b91c1c; }
+.recent-sore { display: block; margin-top: 8rpx; font-size: 22rpx; }
+
+/* 知识入口 */
+.entry-row {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  margin-top: 24rpx;
+}
+.entry-card {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 28rpx 32rpx;
+  box-shadow: 0 4rpx 20rpx rgba(16, 24, 40, 0.06);
+}
+.entry-icon { font-size: 44rpx; }
+.entry-info { flex: 1; display: flex; flex-direction: column; gap: 6rpx; }
+.entry-title { font-size: 30rpx; font-weight: 600; color: #1f2937; }
+.entry-desc { font-size: 24rpx; }
+.entry-arrow { font-size: 36rpx; color: #d1d5db; }
+
+/* 空状态引导 */
+.welcome-card {
+  text-align: center;
+  padding: 56rpx 32rpx;
+}
+.welcome-icon { font-size: 96rpx; display: block; margin-bottom: 20rpx; }
+.welcome-title { font-size: 36rpx; font-weight: 700; color: #1f2937; display: block; margin-bottom: 12rpx; }
+.welcome-desc { font-size: 26rpx; display: block; margin-bottom: 40rpx; }
+.welcome-actions { display: flex; flex-direction: column; gap: 20rpx; }
+.welcome-btn { width: 100%; }
+
+/* 首次引导弹窗 */
+.sheet-mask {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5); opacity: 0; visibility: hidden;
+  transition: all 0.25s; z-index: 100;
+}
+.sheet-mask.show { opacity: 1; visibility: visible; }
+
+.welcome-sheet {
+  position: fixed; left: 0; right: 0; bottom: 0;
+  background: #fff; border-radius: 32rpx 32rpx 0 0;
+  max-height: 85vh; display: flex; flex-direction: column;
+  transform: translateY(100%); transition: transform 0.3s;
+  z-index: 101;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.welcome-sheet.show { transform: translateY(0); }
+
+.welcome-sheet-head { padding: 32rpx 32rpx 16rpx; flex-shrink: 0; }
+.welcome-sheet-title { font-size: 36rpx; font-weight: 700; color: #1f2937; display: block; margin-bottom: 10rpx; }
+.welcome-sheet-sub { font-size: 26rpx; }
+
+.welcome-level-list {
+  flex: 1; max-height: 600rpx; padding: 8rpx 32rpx;
+  box-sizing: border-box;
+}
+.welcome-level-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24rpx; border-radius: 16rpx; margin-bottom: 12rpx;
+  background: #f9fafb; border: 2rpx solid transparent;
+}
+.welcome-level-item.active { background: #ecfdf5; border-color: #10b981; }
+.welcome-level-left { display: flex; align-items: center; gap: 20rpx; flex: 1; }
+.welcome-level-num {
+  width: 72rpx; height: 72rpx; border-radius: 16rpx;
+  background: #10b981; color: #fff; font-size: 32rpx; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.welcome-level-info { flex: 1; display: flex; flex-direction: column; gap: 4rpx; }
+.welcome-level-name { font-size: 28rpx; font-weight: 600; color: #1f2937; }
+.welcome-level-desc { font-size: 22rpx; line-height: 1.4; }
+.welcome-level-check { font-size: 36rpx; color: #10b981; font-weight: 700; }
+
+.welcome-sheet-foot {
+  display: flex; gap: 20rpx; padding: 20rpx 32rpx 20rpx;
+  border-top: 1rpx solid #f0f1f3; flex-shrink: 0;
+}
+.welcome-skip { flex: 1; }
+.welcome-confirm { flex: 2; }

@@ -1,0 +1,84 @@
+/* pages/welcome/welcome.wxss — 首次授权 */
+.welcome-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60rpx 48rpx;
+  padding-top: 0;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #ecfdf5 0%, #f5f7fa 40%);
+}
+
+.welcome-top {
+  text-align: center;
+  margin-bottom: 80rpx;
+}
+.welcome-logo { font-size: 120rpx; margin-bottom: 20rpx; }
+.welcome-title { font-size: 52rpx; font-weight: 700; color: #1f2937; display: block; margin-bottom: 12rpx; }
+.welcome-sub { font-size: 28rpx; }
+
+.auth-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32rpx;
+  margin-bottom: 80rpx;
+}
+
+/* 头像按钮 */
+.auth-avatar-btn {
+  width: 160rpx !important; height: 160rpx !important;
+  padding: 0 !important; margin: 0 !important;
+  border-radius: 50% !important; overflow: hidden;
+  background: #fff !important;
+  line-height: 1 !important; border: 2rpx dashed #d1d5db !important;
+  box-sizing: border-box; position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.auth-avatar-btn::after { border: none; }
+.auth-avatar-img { width: 160rpx !important; height: 160rpx !important; border-radius: 50%; display: block; }
+.auth-avatar-default {
+  display: flex; flex-direction: column; align-items: center; gap: 4rpx;
+}
+.auth-avatar-plus { font-size: 48rpx; color: #9ca3af; line-height: 1; }
+.auth-avatar-tip { font-size: 20rpx; color: #9ca3af; }
+
+/* 昵称输入 */
+.auth-nick-row {
+  width: 100%;
+  position: relative;
+}
+.auth-nick-input {
+  height: 88rpx;
+  background: #fff;
+  border-radius: 44rpx;
+  padding: 0 60rpx 0 32rpx;
+  font-size: 30rpx;
+  text-align: center;
+  border: 2rpx solid #e5e7eb;
+  box-sizing: border-box;
+}
+
+/* 已设置勾 */
+.auth-check {
+  position: absolute;
+  right: -4rpx; top: -4rpx;
+  width: 44rpx; height: 44rpx;
+  border-radius: 50%;
+  background: #10b981;
+  color: #fff;
+  font-size: 24rpx;
+  display: flex; align-items: center; justify-content: center;
+  border: 4rpx solid #fff;
+}
+.auth-check-nick {
+  right: 24rpx; top: 50%;
+  transform: translateY(-50%);
+}
+
+/* 底部按钮 */
+.auth-actions { display: flex; flex-direction: column; align-items: center; gap: 24rpx; }
+.auth-enter { width: 100%; }
+.btn-disabled { background: #d1d5db !important; color: #fff !important; }
+.auth-skip { font-size: 26rpx; padding: 12rpx; }

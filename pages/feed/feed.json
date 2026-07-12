@@ -1,0 +1,6 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "球友圈",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#f5f7fa"
+}

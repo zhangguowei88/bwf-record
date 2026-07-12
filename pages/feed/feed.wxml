@@ -1,0 +1,92 @@
+<!-- pages/feed/feed.wxml — 球友圈 -->
+<view class="container safe-bottom">
+
+  <view wx:if="{{loading && !list.length}}" class="loading-wrap">
+    <view class="loading-spinner"></view>
+    <text class="text-light">加载中...</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:if="{{!loading && !list.length}}" class="empty">
+    <view class="empty-icon">👥</view>
+    <text class="empty-text">球友圈还没有动态</text>
+    <text class="text-light">记录打球时分享到这里，球友就能看到</text>
+  </view>
+
+  <!-- 动态列表 -->
+  <view wx:for="{{list}}" wx:key="_id" class="card feed-item">
+    <!-- 作者 -->
+    <view class="feed-head">
+      <view class="feed-avatar" style="background: {{item.level_color}};">
+        <text>{{item.author.gender === 1 ? '♂' : (item.author.gender === 2 ? '♀' : '🏸')}}</text>
+      </view>
+      <view class="feed-author">
+        <view class="feed-name-row">
+          <text class="feed-name">{{item.author.nick_name}}</text>
+          <text wx:if="{{item.is_mine}}" class="feed-mine-tag">我</text>
+        </view>
+        <view class="feed-meta">
+          <text class="feed-level" style="color: {{item.level_color}};">{{item.author.badminton_level}} {{item.level_name}}</text>
+          <text class="feed-time text-light">· {{item.time_text}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 内容 -->
+    <view class="feed-body">
+      <view class="feed-info">
+        <text class="feed-date">{{item.record_date}}</text>
+        <text class="feed-duration">{{item.duration_text}}</text>
+        <text class="feed-chip chip-intensity-{{item.intensity}}">{{item.intensity_label}}</text>
+        <text class="feed-chip chip-feeling-{{item.feeling}}">{{item.feeling_label}}</text>
+      </view>
+      <text wx:if="{{item.venue}}" class="feed-venue text-light">📍 {{item.venue}}</text>
+      <text wx:if="{{item.note}}" class="feed-note">{{item.note}}</text>
+    </view>
+
+    <!-- 互动 -->
+    <view class="feed-actions">
+      <view class="action-btn {{item.is_liked ? 'liked' : ''}}" data-id="{{item._id}}" bindtap="toggleLike">
+        <text class="action-icon">{{item.is_liked ? '❤️' : '🤍'}}</text>
+        <text class="action-text">{{item.like_count}}</text>
+      </view>
+      <view class="action-btn" data-id="{{item._id}}" bindtap="openComment">
+        <text class="action-icon">💬</text>
+        <text class="action-text">{{item.comment_count}}</text>
+      </view>
+      <button class="action-btn action-share" open-type="share" data-id="{{item._id}}">
+        <text class="action-icon">↗</text>
+        <text class="action-text">分享</text>
+      </button>
+      <view class="action-btn action-more" data-id="{{item._id}}" bindtap="showMoreMenu">
+        <text class="action-icon">⋯</text>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{hasMore}}" class="loading-more text-light">加载中...</view>
+  <view wx:if="{{!loading && list.length > 0 && !hasMore}}" class="loading-more text-light">— 没有更多了 —</view>
+</view>
+
+<!-- 评论弹窗 -->
+<view class="sheet-mask {{showComment ? 'show' : ''}}" bindtap="closeComment"></view>
+<view class="comment-sheet {{showComment ? 'show' : ''}}">
+  <view class="comment-header">
+    <text class="comment-title">评论</text>
+    <text class="comment-close" bindtap="closeComment">✕</text>
+  </view>
+
+  <scroll-view scroll-y class="comment-list">
+    <view wx:if="{{!comments.length}}" class="comment-empty text-light">还没有评论，说点什么</view>
+    <view wx:for="{{comments}}" wx:key="_id" class="comment-item">
+      <text class="comment-author">{{item.author_name}}</text>
+      <text class="comment-content">{{item.content}}</text>
+      <text class="comment-time text-light">{{item.time_text}}</text>
+    </view>
+  </scroll-view>
+
+  <view class="comment-input-row">
+    <input class="comment-input" value="{{commentText}}" bindinput="onCommentInput" placeholder="说点什么..." confirm-type="send" bindconfirm="submitComment" />
+    <button class="comment-send" bindtap="submitComment" loading="{{submittingComment}}" disabled="{{submittingComment}}">发送</button>
+  </view>
+</view>
