@@ -1,0 +1,9 @@
+# 仓库根/.dockerignore
+pages/
+cloudfunctions/
+utils/
+*.js
+*.json
+!server/
+node_modules/
+miniprogram_npm/
