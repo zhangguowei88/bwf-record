@@ -38,6 +38,12 @@ class AnalyzeReq(BaseModel):
     main_side: str = 'r'   # 持拍手 r/l/auto
 
 
+@app.get('/')
+def root():
+    # 根路由：兼容云托管默认健康探针路径
+    return {'status': 'ok'}
+
+
 @app.get('/health')
 def health():
     return {'status': 'ok'}
