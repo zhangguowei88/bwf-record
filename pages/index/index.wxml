@@ -132,6 +132,14 @@
 
     <!-- 知识入口 -->
     <view class="entry-row">
+      <view class="entry-card" bindtap="goCoach">
+        <text class="entry-icon">🎯</text>
+        <view class="entry-info">
+          <text class="entry-title">动作诊断</text>
+          <text class="entry-desc text-light">拍一段 · 看挥拍问题</text>
+        </view>
+        <text class="entry-arrow">›</text>
+      </view>
       <view class="entry-card" bindtap="goFeed">
         <text class="entry-icon">👥</text>
         <view class="entry-info">

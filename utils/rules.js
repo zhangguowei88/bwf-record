@@ -20,6 +20,27 @@ const LEVELS = [
 /** 默认每周目标场次 */
 const DEFAULT_WEEKLY_GOAL = 3
 
+/** 动作诊断 - 动作类型选项 */
+const ACTION_TYPES = [
+  { value: 'high_clear', name: '高远球', desc: '后场击高远球，发力链条最完整，推荐首选' },
+  { value: 'smash', name: '杀球', desc: '下压进攻杀球' },
+  { value: 'drop', name: '吊球', desc: '后场吊网前' },
+]
+
+/** 动作诊断 - 阶段名称 */
+const STAGE_NAMES = {
+  prepare: '准备期',
+  backswing: '引拍期',
+  hit: '击球期',
+  follow_through: '随挥期',
+}
+
+/** 动作类型名称映射 */
+const ACTION_TYPE_NAMES = ACTION_TYPES.reduce((m, t) => {
+  m[t.value] = t.name
+  return m
+}, {})
+
 /** 强度标签 */
 const INTENSITY_LABELS = {
   1: '摸鱼',
@@ -76,6 +97,15 @@ function levelColor(value) {
   if (v >= 3.0) return '#10b981'
   if (v >= 2.0) return '#3b82f6'
   return '#9ca3af'
+}
+
+/** 动作诊断 - 评分等级文案 */
+function scoreLevel(score) {
+  const s = Number(score) || 0
+  if (s >= 85) return { name: '优秀', color: '#10b981', desc: '动作规范，保持节奏' }
+  if (s >= 70) return { name: '良好', color: '#3b82f6', desc: '基本到位，细节可优化' }
+  if (s >= 55) return { name: '一般', color: '#f59e0b', desc: '存在明显问题，建议针对性练习' }
+  return { name: '待改进', color: '#ef4444', desc: '动作偏差较大，建议从基础练起' }
 }
 
 /**
@@ -175,10 +205,14 @@ module.exports = {
   INTENSITY_LABELS,
   FEELING_LABELS,
   SORE_PARTS,
+  ACTION_TYPES,
+  ACTION_TYPE_NAMES,
+  STAGE_NAMES,
   getLevel,
   getNextLevel,
   levelColor,
   playAgeText,
   buildAdvice,
   isThisWeek,
+  scoreLevel,
 }

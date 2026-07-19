@@ -131,6 +131,10 @@ Page({
     wx.navigateTo({ url: '/pages/feed/feed' })
   },
 
+  goCoach() {
+    wx.navigateTo({ url: '/pages/coach/coach' })
+  },
+
   onShareAppMessage() {
     const d = this.data.data
     return {

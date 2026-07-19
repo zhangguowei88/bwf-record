@@ -1,0 +1,139 @@
+<!-- pages/coach/coach.wxml — 动作诊断 -->
+<view class="container safe-bottom">
+
+  <!-- 上传区 -->
+  <view class="card" wx:if="{{!analyzing && !report}}">
+    <view class="card-title"><text>挥拍诊断</text></view>
+
+    <!-- 已选视频预览 -->
+    <video wx:if="{{videoTempPath}}" class="video-preview" src="{{videoTempPath}}" controls objectFit="contain"></video>
+
+    <!-- 上传入口 -->
+    <view wx:if="{{!videoTempPath}}" class="upload-box" bindtap="chooseVideo">
+      <text class="upload-icon">📹</text>
+      <text class="text-sub">点击选择挥拍视频</text>
+      <text class="upload-tip">建议侧面 45° 拍摄，15 秒内，完整记录一次挥拍</text>
+    </view>
+
+    <!-- 动作类型 -->
+    <view class="action-row">
+      <view wx:for="{{actionTypes}}" wx:key="value"
+        class="action-chip {{actionType === item.value ? 'active' : ''}}"
+        data-value="{{item.value}}" bindtap="onPickAction">
+        {{item.name}}
+      </view>
+    </view>
+    <text class="upload-tip" wx:if="{{videoTempPath}}">当前动作：{{actionType}}</text>
+
+    <button wx:if="{{videoTempPath}}" class="btn btn-primary btn-block" style="margin-top:24rpx;"
+      bindtap="chooseVideo">重新选择</button>
+  </view>
+
+  <!-- 分析中 -->
+  <view class="card" wx:if="{{analyzing}}">
+    <view class="analyzing">
+      <view class="loading-spinner"></view>
+      <text class="analyzing-text">正在分析挥拍动作...</text>
+      <text class="analyzing-sub">提取骨骼点 · 划分动作阶段 · 计算发力链 · 比对标准动作</text>
+    </view>
+  </view>
+
+  <!-- 报告区 -->
+  <block wx:if="{{report}}">
+    <!-- 综合分 -->
+    <view class="card score-card">
+      <text class="text-light" style="font-size:26rpx;">综合评分</text>
+      <view class="score-num" style="color:{{report.scoreColor}};">{{report.total_score}}</view>
+      <view class="score-level-tag" style="background:{{report.scoreColor}}1a;color:{{report.scoreColor}};">
+        {{report.scoreName}}
+      </view>
+      <text class="score-desc">{{report.scoreDesc}}</text>
+    </view>
+
+    <!-- 骨骼轨迹 -->
+    <view class="card">
+      <view class="card-title"><text>关键帧骨骼轨迹</text></view>
+      <view class="canvas-wrap">
+        <canvas type="2d" id="skeletonCanvas"></canvas>
+      </view>
+      <text class="upload-tip">绿色为最终挥拍姿态，半透明为过程关键帧</text>
+    </view>
+
+    <!-- 阶段分数 -->
+    <view class="card">
+      <view class="card-title"><text>动作阶段评分</text></view>
+      <view class="stage-grid">
+        <view class="stage-item">
+          <text class="stage-name">准备期</text>
+          <text class="stage-score">{{report.stage_scores.prepare}}</text>
+        </view>
+        <view class="stage-item">
+          <text class="stage-name">引拍期</text>
+          <text class="stage-score">{{report.stage_scores.backswing}}</text>
+        </view>
+        <view class="stage-item">
+          <text class="stage-name">击球期</text>
+          <text class="stage-score">{{report.stage_scores.hit}}</text>
+        </view>
+        <view class="stage-item">
+          <text class="stage-name">随挥期</text>
+          <text class="stage-score">{{report.stage_scores.follow_through}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 指标 -->
+    <view class="card">
+      <view class="card-title"><text>关键指标</text></view>
+      <view class="metric-row">
+        <text class="metric-label">抬肘角度</text>
+        <text class="metric-value">{{report.metrics.elbow_raise_angle}}°</text>
+      </view>
+      <view class="metric-row">
+        <text class="metric-label">内旋角度(参考)</text>
+        <text class="metric-value">{{report.metrics.pronation_angle}}°</text>
+      </view>
+      <view class="metric-row">
+        <text class="metric-label">击球点</text>
+        <text class="metric-value {{report.metrics.hit_point.is_optimal ? '' : 'warn'}}">
+          {{report.metrics.hit_point.is_optimal ? '前上方最佳区' : '偏低/偏后'}}
+        </text>
+      </view>
+      <view class="metric-row">
+        <text class="metric-label">发力链</text>
+        <text class="metric-value {{report.metrics.kinetic_chain.is_disconnected ? 'danger' : ''}}">
+          {{report.metrics.kinetic_chain.is_disconnected ? '脱节' : '连贯'}}
+        </text>
+      </view>
+    </view>
+
+    <!-- 错误清单 -->
+    <view class="card" wx:if="{{report.errors.length}}">
+      <view class="card-title"><text>问题与建议</text></view>
+      <view wx:for="{{report.errors}}" wx:key="code" class="error-item {{item.severity}}">
+        <view class="error-head">
+          <text class="error-name">{{item.name}}</text>
+        </view>
+        <text class="error-desc">{{item.desc}}</text>
+        <text class="error-fix">💡 {{item.fix}}</text>
+      </view>
+    </view>
+
+    <!-- 分享 -->
+    <button class="btn btn-ghost btn-block share-btn" bindtap="shareToFeed">分享到球友圈</button>
+    <button class="btn btn-block" style="margin-top:16rpx;color:var(--c-text-sub);" bindtap="chooseVideo">再测一次</button>
+  </block>
+
+  <!-- 历史报告 -->
+  <view class="card" wx:if="{{reportList.length}}">
+    <view class="card-title"><text>历史诊断</text></view>
+    <view wx:for="{{reportList}}" wx:key="_id" class="history-item" data-id="{{item._id}}" bindtap="viewDetail">
+      <view class="history-left">
+        <text class="history-title">{{item.actionTypeName}}</text>
+        <text class="history-meta">{{item.dateText}} · {{item.errorCount}}项问题</text>
+      </view>
+      <text class="history-score" style="color:{{item.scoreColor}};">{{item.total_score}}</text>
+    </view>
+  </view>
+
+</view>

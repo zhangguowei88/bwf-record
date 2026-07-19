@@ -45,7 +45,7 @@
     "disableSWC": true
   },
   "compileType": "miniprogram",
-  "libVersion": "3.5.0",
+  "libVersion": "2.14.1",
   "appid": "wxd75908c02ae01afe",
   "projectname": "sport-data-mini",
   "condition": {},

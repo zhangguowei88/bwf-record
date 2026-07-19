@@ -6,7 +6,8 @@
     "pages/profile/profile",
     "pages/guide/guide",
     "pages/gear/gear",
-    "pages/feed/feed"
+    "pages/feed/feed",
+    "pages/coach/coach"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ffffff",

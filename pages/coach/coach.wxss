@@ -1,0 +1,223 @@
+/* pages/coach/coach.wxss — 动作诊断页 */
+
+/* 上传区 */
+.upload-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx 32rpx;
+  border: 2rpx dashed var(--c-border);
+  border-radius: var(--radius);
+  background: #fafbfc;
+}
+.upload-box .upload-icon {
+  font-size: 72rpx;
+  margin-bottom: 16rpx;
+}
+.upload-tip {
+  font-size: 24rpx;
+  color: var(--c-text-light);
+  margin-top: 8rpx;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* 已选视频预览 */
+.video-preview {
+  width: 100%;
+  border-radius: var(--radius);
+  margin-bottom: 24rpx;
+}
+
+/* 动作类型选择 */
+.action-row {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 24rpx;
+}
+.action-chip {
+  flex: 1;
+  padding: 20rpx 0;
+  text-align: center;
+  border-radius: 32rpx;
+  background: #f3f4f6;
+  color: var(--c-text-sub);
+  font-size: 28rpx;
+}
+.action-chip.active {
+  background: var(--c-primary-light);
+  color: var(--c-primary-dark);
+  font-weight: 600;
+}
+
+/* 综合分 */
+.score-card {
+  text-align: center;
+}
+.score-num {
+  font-size: 96rpx;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.score-level-tag {
+  display: inline-block;
+  padding: 6rpx 24rpx;
+  border-radius: 24rpx;
+  font-size: 26rpx;
+  margin-top: 12rpx;
+}
+.score-desc {
+  font-size: 26rpx;
+  color: var(--c-text-sub);
+  margin-top: 12rpx;
+}
+
+/* 阶段分数 */
+.stage-grid {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16rpx;
+}
+.stage-item {
+  flex: 1;
+  text-align: center;
+}
+.stage-name {
+  font-size: 24rpx;
+  color: var(--c-text-light);
+}
+.stage-score {
+  font-size: 36rpx;
+  font-weight: 600;
+  margin-top: 8rpx;
+}
+
+/* 指标行 */
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid var(--c-border);
+}
+.metric-row:last-child {
+  border-bottom: none;
+}
+.metric-label {
+  font-size: 28rpx;
+  color: var(--c-text-sub);
+}
+.metric-value {
+  font-size: 28rpx;
+  color: var(--c-text);
+  font-weight: 500;
+}
+.metric-value.warn {
+  color: var(--c-warn);
+}
+.metric-value.danger {
+  color: var(--c-danger);
+}
+
+/* 错误清单 */
+.error-item {
+  padding: 20rpx;
+  border-radius: 16rpx;
+  margin-bottom: 16rpx;
+}
+.error-item.warn {
+  background: #fffbeb;
+}
+.error-item.danger {
+  background: #fef2f2;
+}
+.error-item.info {
+  background: #f0f9ff;
+}
+.error-head {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 8rpx;
+}
+.error-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--c-text);
+}
+.error-desc {
+  font-size: 26rpx;
+  color: var(--c-text-sub);
+  line-height: 1.5;
+}
+.error-fix {
+  font-size: 26rpx;
+  color: var(--c-primary-dark);
+  margin-top: 8rpx;
+  line-height: 1.5;
+}
+
+/* Canvas 骨骼叠加 */
+.canvas-wrap {
+  width: 100%;
+  height: 480rpx;
+  background: #1f2937;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+#skeletonCanvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* 分析中骨架屏 */
+.analyzing {
+  text-align: center;
+  padding: 80rpx 0;
+}
+.analyzing .loading-spinner {
+  margin: 0 auto 24rpx;
+}
+.analyzing-text {
+  font-size: 28rpx;
+  color: var(--c-text-sub);
+}
+.analyzing-sub {
+  font-size: 24rpx;
+  color: var(--c-text-light);
+  margin-top: 8rpx;
+}
+
+/* 历史列表项 */
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx;
+  border-radius: var(--radius);
+  background: var(--c-card);
+  margin-bottom: 16rpx;
+  box-shadow: var(--shadow);
+}
+.history-left {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+.history-title {
+  font-size: 28rpx;
+  font-weight: 500;
+}
+.history-meta {
+  font-size: 24rpx;
+  color: var(--c-text-light);
+}
+.history-score {
+  font-size: 44rpx;
+  font-weight: 700;
+}
+
+/* 分享按钮 */
+.share-btn {
+  margin-top: 16rpx;
+}

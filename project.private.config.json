@@ -1,6 +1,6 @@
 {
-  "libVersion": "2.14.1",
-  "projectname": "sport-mini",
+  "libVersion": "3.17.0",
+  "projectname": "bwf-record",
   "condition": {},
   "setting": {
     "urlCheck": false,
