@@ -1,9 +1,26 @@
-# 仓库根/.dockerignore
+# 排除小程序前端代码，不进 Docker 构建上下文
 pages/
 cloudfunctions/
 utils/
-*.js
-*.json
-!server/
-node_modules/
 miniprogram_npm/
+node_modules/
+.git/
+.gitignore
+
+# 小程序项目文件
+app.js
+app.json
+app.wxss
+sitemap.json
+project.config.json
+project.private.config.json
+
+# 文档
+README.md
+
+# 开发工具
+.vscode/
+.idea/
+
+*.log
+.DS_Store

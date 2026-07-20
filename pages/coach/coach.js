@@ -62,39 +62,64 @@ Page({
   },
 
   /** 上传 + 分析 */
-  async uploadAndAnalyze(filePath) {
-    this.setData({ uploading: true, analyzing: false, report: null })
-    wx.showLoading({ title: '上传中...', mask: true })
-    try {
-      const app = getApp()
-      const openid = app.globalData.openid || 'guest'
-      const cloudPath = `coach/${openid}_${Date.now()}.mp4`
-      const upRes = await wx.cloud.uploadFile({ cloudPath, filePath })
-      const fileId = upRes.fileID
-      this.setData({ videoFileID: fileId, uploading: false, analyzing: true })
-      wx.hideLoading()
-
-      // 调云函数分析（同步等待，超时由云函数 60s 兜底）
-      wx.showLoading({ title: '分析中...', mask: true })
-      const data = await call('coach', {
-        type: 'analyze',
-        file_id: fileId,
-        action_type: this.data.actionType,
-        main_side: 'r',
-      })
-      wx.hideLoading()
-      this.setData({ analyzing: false, report: this.decorateReport(data) })
-      // 绘制骨骼
-      this.drawSkeleton(data.skeleton_frames)
-      // 刷新历史
-      this.loadList(true)
-      wx.showToast({ title: '诊断完成', icon: 'success' })
-    } catch (e) {
-      wx.hideLoading()
-      this.setData({ uploading: false, analyzing: false })
-      wx.showToast({ title: e.message || '诊断失败', icon: 'none' })
-    }
+   /**上传 +分析 */
+ async uploadAndAnalyze(filePath) {
+  this.setData({ uploading: true, analyzing: false, report: null })
+  wx.showLoading({ title: '上传中...', mask: true })
+  try {
+  const app = getApp()
+  //确保 openid已获取，未获取则等待
+  let openid = app.globalData.openid
+  if (!openid) {
+  await app.ensureLogin()
+  openid = app.globalData.openid || 'user'
+  }
+ 
+  //构建安全路径（去除特殊字符）
+  const safeId = String(openid).replace(/[^a-zA-Z0-9_-]/g, '').slice(0,32)
+  const cloudPath = `coach/${safeId}_${Date.now()}.mp4`
+ 
+  console.log('[upload] start', cloudPath, filePath)
+  const upRes = await wx.cloud.uploadFile({ cloudPath, filePath })
+  console.log('[upload] success', upRes)
+ 
+  const fileId = upRes.fileID
+  if (!fileId) {
+  throw new Error('上传成功但未获取文件ID')
+  }
+ 
+  this.setData({ videoFileID: fileId, uploading: false, analyzing: true })
+  wx.hideLoading()
+ 
+  //调云函数分析（同步等待，超时由云函数60s兜底）
+  wx.showLoading({ title: '分析中...', mask: true })
+  const data = await call('coach', {
+  type: 'analyze',
+  file_id: fileId,
+  action_type: this.data.actionType,
+  main_side: 'r',
+  })
+  wx.hideLoading()
+  this.setData({ analyzing: false, report: this.decorateReport(data) })
+  //绘制骨骼
+  this.drawSkeleton(data.skeleton_frames)
+  //刷新历史
+  this.loadList(true)
+  wx.showToast({ title: '诊断完成', icon: 'success' })
+  } catch (e) {
+  wx.hideLoading()
+  this.setData({ uploading: false, analyzing: false })
+  console.error('[uploadAndAnalyze] error:', e)
+  //显示详细错误，特别是云存储上传错误
+  const msg = e.errMsg || e.message || '上传失败'
+  wx.showModal({
+  title: '上传失败',
+  content: msg + '\n\n请检查：\n1.视频文件是否超过100MB\n2.网络连接是否正常\n3.云存储权限是否配置正确',
+  showCancel: false,
+  })
+  }
   },
+ 
 
   /** 加工报告：补充评分等级文案、错误数量等派生字段供 wxml 使用 */
   decorateReport(data) {
