@@ -9,7 +9,17 @@ const db = cloud.database()
 const _ = db.command
 
 // 云托管分析服务地址（部署后在云函数环境变量配置 ANALYZER_URL）
-const ANALYZER_URL = process.env.ANALYZER_URL || ''
+const RAW_ANALYZER_URL = process.env.ANALYZER_URL || ''
+// 清理 URL：去除首尾空格，确保有协议头
+const ANALYZER_URL = (() => {
+  let url = String(RAW_ANALYZER_URL).trim()
+  if (!url) return ''
+  // 如果没有协议头，默认加 http://
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    url = 'http://' + url
+  }
+  return url
+})()
 
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
