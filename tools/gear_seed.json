@@ -1,0 +1,74 @@
+[
+  {
+    "name": "天斧100ZZ ASTROX 100ZZ",
+    "brand": "YONEX",
+    "category": "racket",
+    "tier": "high",
+    "spec": {
+      "u_weight": "3U/4U",
+      "weight_g": "83-88",
+      "balance_point": "305mm",
+      "shaft_hardness": "硬",
+      "tension": "3U 21-29磅 / 4U 20-28磅",
+      "frame": "流体形盒式"
+    },
+    "price_low": 1800,
+    "price_high": 1930,
+    "injury_tags": ["手腕不适慎选"],
+    "cover_file_id": "",
+    "status": "approved",
+    "review_count": 0,
+    "avg_score": 0,
+    "official_score": 0,
+    "official_review_id": "",
+    "data_source": "公开规格采集(已校对)"
+  },
+  {
+    "name": "天斧99 ASTROX 99",
+    "brand": "YONEX",
+    "category": "racket",
+    "tier": "high",
+    "spec": {
+      "u_weight": "4U",
+      "weight_g": "86",
+      "balance_point": "308mm(待核)",
+      "shaft_hardness": "硬",
+      "tension": "25-27磅(待核)",
+      "frame": "盒式"
+    },
+    "price_low": 1300,
+    "price_high": 1500,
+    "injury_tags": ["手腕不适慎选"],
+    "cover_file_id": "",
+    "status": "approved",
+    "review_count": 0,
+    "avg_score": 0,
+    "official_score": 0,
+    "official_review_id": "",
+    "data_source": "公开规格采集(部分待校对)"
+  },
+  {
+    "name": "天斧88D PRO ASTROX 88D Pro",
+    "brand": "YONEX",
+    "category": "racket",
+    "tier": "high",
+    "spec": {
+      "u_weight": "3U/4U",
+      "weight_g": "83-88",
+      "balance_point": "302-309mm",
+      "shaft_hardness": "硬",
+      "tension": "3U 21-29磅 / 4U 20-28磅",
+      "frame": "AERO+BOX混合"
+    },
+    "price_low": 1700,
+    "price_high": 1850,
+    "injury_tags": ["手腕不适慎选"],
+    "cover_file_id": "",
+    "status": "approved",
+    "review_count": 0,
+    "avg_score": 0,
+    "official_score": 0,
+    "official_review_id": "",
+    "data_source": "公开规格采集(已校对)"
+  }
+]

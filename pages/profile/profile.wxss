@@ -105,3 +105,31 @@
 .edit-save { flex: 1; }
 
 .footer { text-align: center; padding: 48rpx 0 24rpx; font-size: 24rpx; }
+
+/* 反馈入口 */
+.entry-row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+.entry-icon {
+  font-size: 44rpx;
+}
+.entry-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+.entry-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: var(--c-text);
+}
+.entry-desc {
+  font-size: 24rpx;
+}
+.entry-arrow {
+  font-size: 36rpx;
+  color: var(--c-text-light);
+}

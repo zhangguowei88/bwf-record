@@ -41,6 +41,131 @@ const ACTION_TYPE_NAMES = ACTION_TYPES.reduce((m, t) => {
   return m
 }, {})
 
+/** 装备分类（限羽毛球专用） */
+const GEAR_CATEGORIES = [
+  { value: 'racket', name: '球拍', icon: '🏸' },
+  { value: 'shuttle', name: '羽毛球', icon: '⚪' },
+  { value: 'shoe', name: '球鞋', icon: '👟' },
+  { value: 'apparel', name: '服装', icon: '👕' },
+  { value: 'bag', name: '球包', icon: '🎒' },
+  { value: 'guard', name: '护具', icon: '🩹' },
+]
+
+/** 装备分类名称映射 */
+const GEAR_CATEGORY_NAMES = GEAR_CATEGORIES.reduce((m, c) => {
+  m[c.value] = c.name
+  return m
+}, {})
+
+/** 评测类型 */
+const REVIEW_TYPES = [
+  { value: 'quick', name: '快速点评' },
+  { value: 'long', name: '深度评测' },
+]
+
+/** 评测来源（三层数据分层） */
+const REVIEW_SOURCES = [
+  { value: 'official', name: '平台实测', color: '#3b82f6' },   // 官方，蓝色
+  { value: 'thirdparty', name: '第三方参考', color: '#9ca3af' }, // 第三方，灰色
+  { value: 'user', name: '用户众测', color: '#f59e0b' },        // 用户，金色(总分)
+]
+
+/** 各品类评测维度（统一 10 分制） */
+const GEAR_DIMENSIONS = {
+  racket: [
+    { key: 'attack', name: '进攻' },
+    { key: 'smash', name: '点杀连贯' },
+    { key: 'drive', name: '平抽挡' },
+    { key: 'clear', name: '高远控球' },
+    { key: 'net', name: '网前容错' },
+    { key: 'difficulty', name: '上手难度' },
+    { key: 'shock', name: '减震护腕' },
+  ],
+  shoe: [
+    { key: 'support', name: '侧向支撑' },
+    { key: 'grip', name: '急停防滑' },
+    { key: 'cushion', name: '起跳缓震' },
+    { key: 'speed', name: '启动速度' },
+    { key: 'wrap', name: '鞋面包裹' },
+    { key: 'durability', name: '久穿耐磨' },
+    { key: 'breath', name: '透气性' },
+  ],
+  shuttle: [
+    { key: 'stable', name: '飞行稳定' },
+    { key: 'durable', name: '耐打次数' },
+    { key: 'sound', name: '击球声音' },
+    { key: 'cold', name: '低温耐打' },
+    { key: 'humid', name: '湿度衰减' },
+    { key: 'consistency', name: '批次一致性' },
+    { key: 'value', name: '性价比' },
+  ],
+  apparel: [
+    { key: 'comfort', name: '穿着舒适' },
+    { key: 'sweat', name: '吸汗速干' },
+    { key: 'stretch', name: '延展性' },
+    { key: 'durability', name: '耐洗耐磨' },
+    { key: 'value', name: '性价比' },
+  ],
+  bag: [
+    { key: 'capacity', name: '容量' },
+    { key: 'compartment', name: '分区合理' },
+    { key: 'material', name: '用料做工' },
+    { key: 'carry', name: '背负舒适' },
+    { key: 'value', name: '性价比' },
+  ],
+  guard: [
+    { key: 'protect', name: '防护性' },
+    { key: 'comfort', name: '佩戴舒适' },
+    { key: 'fix', name: '固定不滑' },
+    { key: 'breath', name: '透气性' },
+    { key: 'durability', name: '耐久度' },
+  ],
+}
+
+/** 用户水平（影响评测权重） */
+const USER_LEVELS = [
+  { value: 'beginner', name: '新手', weight: 0.15 },
+  { value: 'intermediate', name: '进阶', weight: 0.15 },
+  { value: 'advanced', name: '高阶(球龄3年+)', weight: 0.25 },
+]
+
+/** 主打打法 */
+const PLAY_STYLES = [
+  { value: 'singles_rally', name: '单打拉吊' },
+  { value: 'aggressive', name: '暴力进攻' },
+  { value: 'doubles_drive', name: '双打平抽' },
+]
+
+/** 装备定位 */
+const GEAR_TIERS = [
+  { value: 'entry', name: '入门' },
+  { value: 'mid', name: '中端' },
+  { value: 'high', name: '高端' },
+  { value: 'pro', name: '专业' },
+]
+
+/** 伤病提醒标签 */
+const INJURY_TAGS = ['手腕不适慎选', '肩部不适慎选', '膝盖不适慎选', '大体重慎选', '宽脚适配', '瘦脚适配']
+
+/** 星级文案（10分制） */
+function starText(score) {
+  const s = Number(score) || 0
+  if (s >= 9) return '强烈推荐'
+  if (s >= 7.5) return '推荐'
+  if (s >= 6) return '一般'
+  if (s >= 4) return '不太行'
+  return '不推荐'
+}
+
+/** 装备均分颜色（10分制） */
+function scoreColor(score) {
+  const s = Number(score) || 0
+  if (s >= 9) return '#10b981'
+  if (s >= 7.5) return '#3b82f6'
+  if (s >= 6) return '#f59e0b'
+  return '#ef4444'
+}
+
 /** 强度标签 */
 const INTENSITY_LABELS = {
   1: '摸鱼',
@@ -208,6 +333,15 @@ module.exports = {
   ACTION_TYPES,
   ACTION_TYPE_NAMES,
   STAGE_NAMES,
+  GEAR_CATEGORIES,
+  GEAR_CATEGORY_NAMES,
+  REVIEW_TYPES,
+  REVIEW_SOURCES,
+  GEAR_DIMENSIONS,
+  USER_LEVELS,
+  PLAY_STYLES,
+  GEAR_TIERS,
+  INJURY_TAGS,
   getLevel,
   getNextLevel,
   levelColor,
@@ -215,4 +349,6 @@ module.exports = {
   buildAdvice,
   isThisWeek,
   scoreLevel,
+  starText,
+  scoreColor,
 }

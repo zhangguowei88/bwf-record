@@ -1,0 +1,119 @@
+<!-- pages/review_edit/review_edit.wxml — 写评测 -->
+<view class="container safe-bottom">
+
+  <!-- 装备 -->
+  <view class="card">
+    <view class="card-title"><text>评测装备</text></view>
+    <text class="rv-gear-name">{{gearName || '加载中...'}}</text>
+  </view>
+
+  <!-- 评测类型 -->
+  <view class="card">
+    <view class="card-title"><text>评测类型</text></view>
+    <view class="type-row">
+      <view wx:for="{{reviewTypes}}" wx:key="value"
+        class="type-chip {{reviewType === item.value ? 'active' : ''}}"
+        data-value="{{item.value}}" bindtap="pickType">{{item.name}}</view>
+    </view>
+  </view>
+
+  <!-- 维度打分（10分制） -->
+  <view class="card">
+    <view class="card-title"><text>维度打分（1-10分）</text></view>
+    <view wx:for="{{dimensions}}" wx:key="key" class="dim-item">
+      <view class="dim-head">
+        <text class="dim-name">{{item.name}}</text>
+        <text class="dim-score" wx:if="{{dimsMap[item.key]}}">{{dimsMap[item.key]}}</text>
+      </view>
+      <view class="dim-stars">
+        <text wx:for="{{scoreList}}" wx:for-item="s" wx:key="*this"
+          class="dim-dot {{dimsMap[item.key] >= s ? 'on' : ''}}"
+          data-key="{{item.key}}" data-score="{{s}}" bindtap="pickDim">{{s}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 用户画像 -->
+  <view class="card">
+    <view class="card-title"><text>你的情况（影响评测权重）</text></view>
+    <view class="form-item">
+      <text class="form-label">水平</text>
+      <view class="chip-row">
+        <view wx:for="{{userLevels}}" wx:key="value"
+          class="chip {{userLevel === item.value ? 'chip-active' : ''}}"
+          data-value="{{item.value}}" bindtap="pickLevel">{{item.name}}</view>
+      </view>
+    </view>
+    <view class="form-item">
+      <text class="form-label">主打打法</text>
+      <view class="chip-row">
+        <view wx:for="{{playStyles}}" wx:key="value"
+          class="chip {{playStyle === item.value ? 'chip-active' : ''}}"
+          data-value="{{item.value}}" bindtap="pickStyle">{{item.name}}</view>
+      </view>
+    </view>
+    <view class="form-item">
+      <text class="form-label">体重（kg，可选）</text>
+      <input class="form-input" type="digit" value="{{weight}}" bindinput="onWeightInput" placeholder="影响球鞋缓震参考" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">身体情况（可多选）</text>
+      <view class="chip-row">
+        <view wx:for="{{injuries}}" wx:key="*this"
+          class="chip {{injuryPicked.indexOf(item) >= 0 ? 'chip-active' : ''}}"
+          data-value="{{item}}" bindtap="toggleInjury">{{item}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 使用时长 -->
+  <view class="card">
+    <view class="card-title"><text>已使用时长（月）</text></view>
+    <input class="form-input" type="number" value="{{durationMonths}}" bindinput="onDurationInput" />
+  </view>
+
+  <!-- 内容 -->
+  <view class="card">
+    <view class="card-title"><text>{{reviewType === 'long' ? '评测正文' : '点评'}}</text></view>
+    <textarea class="form-textarea" value="{{content}}" bindinput="onContentInput"
+      placeholder="{{reviewType === 'long' ? '详细说说使用感受、适合人群、对比其他装备...' : '简单几句说说感受'}}"
+      maxlength="3000" auto-height></textarea>
+    <text class="char-count text-light">{{content.length || 0}}/3000</text>
+  </view>
+
+  <!-- 长篇：优缺点 + media -->
+  <block wx:if="{{reviewType === 'long'}}">
+    <view class="card">
+      <view class="card-title"><text>优点</text></view>
+      <textarea class="form-textarea" value="{{pros}}" bindinput="onProsInput" placeholder="这装备哪里好" maxlength="500" auto-height></textarea>
+    </view>
+    <view class="card">
+      <view class="card-title"><text>缺点</text></view>
+      <textarea class="form-textarea" value="{{cons}}" bindinput="onConsInput" placeholder="这装备哪里不足" maxlength="500" auto-height></textarea>
+    </view>
+    <view class="card">
+      <view class="card-title"><text>图片/视频（最多9个）</text></view>
+      <view class="media-picker">
+        <view wx:for="{{media}}" wx:key="tempPath" class="media-thumb">
+          <image wx:if="{{item.type === 'image'}}" class="media-thumb-img" src="{{item.tempPath}}" mode="aspectFill" data-idx="{{index}}" bindtap="previewFormMedia" />
+          <view wx:else class="media-thumb-video" data-idx="{{index}}" bindtap="previewFormMedia">
+            <video class="media-thumb-img" src="{{item.tempPath}}" object-fit="cover" muted controls="{{false}}" />
+            <view class="media-play">▶</view>
+          </view>
+          <view wx:if="{{item.uploading}}" class="media-mask">上传中</view>
+          <view class="media-del" data-idx="{{index}}" catchtap="removeMedia">×</view>
+        </view>
+        <view wx:if="{{media.length < 9}}" class="media-add" bindtap="chooseMedia">+</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 使用承诺 -->
+  <view class="card verify-card {{verified ? 'on' : ''}}" bindtap="toggleVerify">
+    <text class="verify-check">{{verified ? '✓' : ''}}</text>
+    <text class="verify-text">我已真实使用该装备 {{durationMonths}} 个月以上，评价基于真实体验，无虚假内容</text>
+  </view>
+
+  <button class="btn btn-primary btn-block" bindtap="submit"
+    loading="{{submitting}}" disabled="{{submitting}}">发布评测</button>
+</view>

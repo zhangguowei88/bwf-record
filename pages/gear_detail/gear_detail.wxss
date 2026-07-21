@@ -1,0 +1,65 @@
+/* pages/gear_detail/gear_detail.wxss */
+
+.gear-head-card { display: flex; align-items: center; justify-content: space-between; }
+.gear-head-row { display: flex; gap: 20rpx; flex: 1; min-width: 0; }
+.gear-cover-lg { width: 140rpx; height: 140rpx; border-radius: 16rpx; flex-shrink: 0; background: #f3f4f6; }
+.gear-cover-ph { display: flex; align-items: center; justify-content: center; font-size: 56rpx; }
+.gear-head-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8rpx; }
+.gear-title { font-size: 32rpx; font-weight: 600; color: var(--c-text); }
+.gear-tag-row { display: flex; gap: 8rpx; }
+.gear-cat-tag { font-size: 22rpx; color: var(--c-primary-dark); background: var(--c-primary-light); padding: 4rpx 16rpx; border-radius: 12rpx; align-self: flex-start; }
+.gear-stat { text-align: center; flex-shrink: 0; }
+.gear-stat-num { font-size: 44rpx; font-weight: 700; }
+.gear-stat-label { font-size: 22rpx; }
+
+/* 三色评分条 */
+.score-bar-card { display: flex; align-items: center; padding: 24rpx 16rpx; }
+.score-bar-item { flex: 1; text-align: center; }
+.score-bar-num { display: block; font-size: 32rpx; font-weight: 700; color: var(--c-text); }
+.score-bar-label { font-size: 22rpx; }
+.score-bar-div { width: 1rpx; height: 60rpx; background: var(--c-border); }
+
+/* 伤病提醒 */
+.injury-card { background: #fffbeb; }
+.injury-tags { display: flex; flex-wrap: wrap; gap: 12rpx; }
+.injury-tag { font-size: 24rpx; color: #ef4444; background: #fef2f2; padding: 6rpx 18rpx; border-radius: 8rpx; }
+
+/* Tab */
+.tab-bar { display: flex; background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 20rpx; overflow: hidden; }
+.tab-item { flex: 1; text-align: center; padding: 24rpx 0; font-size: 26rpx; color: var(--c-text-sub); }
+.tab-item.active { color: var(--c-primary); font-weight: 600; border-bottom: 4rpx solid var(--c-primary); }
+
+.metric-row { display: flex; justify-content: space-between; padding: 12rpx 0; border-bottom: 1rpx solid var(--c-border); }
+.metric-row:last-child { border-bottom: none; }
+.metric-label { font-size: 28rpx; color: var(--c-text-sub); }
+.metric-value { font-size: 28rpx; }
+.empty-text { font-size: 26rpx; }
+
+/* 维度条形图 */
+.bar-item { display: flex; align-items: center; gap: 16rpx; padding: 10rpx 0; }
+.bar-name { width: 140rpx; font-size: 26rpx; color: var(--c-text-sub); flex-shrink: 0; }
+.bar-track { flex: 1; height: 16rpx; background: #f3f4f6; border-radius: 8rpx; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 8rpx; }
+.bar-fill.official { background: #3b82f6; }
+.bar-score { width: 50rpx; text-align: right; font-size: 26rpx; font-weight: 600; }
+
+.rd-content { display: block; font-size: 28rpx; color: var(--c-text); line-height: 1.6; margin-top: 8rpx; }
+.official-meta { font-size: 22rpx; margin-top: 16rpx; }
+
+/* 众测卡片 */
+.rv-card { padding: 24rpx; }
+.rv-head { display: flex; align-items: center; gap: 16rpx; margin-bottom: 12rpx; }
+.rv-avatar { width: 64rpx; height: 64rpx; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 28rpx; flex-shrink: 0; }
+.rv-author { flex: 1; display: flex; flex-direction: column; }
+.rv-name { font-size: 28rpx; font-weight: 500; }
+.rv-time { font-size: 22rpx; }
+.rv-score { font-size: 30rpx; font-weight: 600; color: #f59e0b; }
+.rv-content { display: block; font-size: 28rpx; line-height: 1.5; margin-bottom: 12rpx; }
+.rv-bars { display: flex; flex-direction: column; gap: 6rpx; margin-bottom: 12rpx; }
+.mini-bar { display: flex; align-items: center; gap: 12rpx; }
+.mini-bar-name { width: 120rpx; font-size: 22rpx; flex-shrink: 0; }
+.mini-bar-track { flex: 1; height: 10rpx; background: #f3f4f6; border-radius: 5rpx; overflow: hidden; }
+.mini-bar-fill { height: 100%; background: #f59e0b; border-radius: 5rpx; }
+.rv-tags { display: flex; gap: 16rpx; align-items: center; }
+.rv-type-tag { font-size: 22rpx; color: var(--c-primary-dark); background: var(--c-primary-light); padding: 2rpx 14rpx; border-radius: 8rpx; }
+.rv-dur { font-size: 22rpx; }

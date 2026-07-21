@@ -1,61 +1,51 @@
-<!-- pages/gear/gear.wxml — 装备指南 -->
+<!-- pages/gear/gear.wxml — 装备评测主页 -->
 <view class="container safe-bottom">
 
-  <view class="guide-header">
-    <text class="guide-title">🏸 装备指南</text>
-    <text class="guide-sub text-light">球拍 · 球鞋 · 球 · 护具</text>
+  <!-- 搜索 -->
+  <view class="search-bar">
+    <input class="search-input" value="{{keyword}}" bindinput="onKeywordInput"
+      bindconfirm="onSearchConfirm" placeholder="搜索球拍 / 球鞋 / 羽毛球..." confirm-type="search" />
   </view>
 
-  <view wx:for="{{sections}}" wx:key="key" class="card section-card">
-    <view class="section-head" data-key="{{item.key}}" bindtap="toggleSection">
-      <view class="section-head-left">
-        <text class="section-icon">{{item.icon}}</text>
-        <view class="section-head-info">
-          <text class="section-title">{{item.title}}</text>
-          <text class="section-desc text-light">{{item.desc}}</text>
-        </view>
+  <!-- 分类 -->
+  <scroll-view scroll-x class="cat-scroll" enhanced show-scrollbar="{{false}}">
+    <view class="cat-tabs">
+      <view wx:for="{{categories}}" wx:key="value"
+        class="cat-tab {{category === item.value ? 'active' : ''}}"
+        data-value="{{item.value}}" bindtap="pickCategory">
+        {{item.name}}
       </view>
-      <text class="section-arrow {{item.expanded ? 'expanded' : ''}}">›</text>
     </view>
+  </scroll-view>
 
-    <view class="section-body" wx:if="{{item.expanded}}">
-      <view wx:for="{{item.chapters}}" wx:for-item="ch" wx:key="title" class="chapter">
-        <text class="chapter-title">{{ch.title}}</text>
+  <!-- 装备列表 -->
+  <view wx:if="{{loading && !list.length}}" class="loading-wrap">
+    <view class="loading-spinner"></view>
+    <text class="text-light">加载中...</text>
+  </view>
 
-        <block wx:if="{{ch.points}}">
-          <view class="sub-block">
-            <text class="sub-title sub-title-points">选购要点</text>
-            <view class="chapter-list">
-              <view wx:for="{{ch.points}}" wx:for-item="line" wx:for-index="i" wx:key="i" class="chapter-line">
-                <text class="line-dot line-dot-points">·</text>
-                <text class="line-text">{{line}}</text>
-              </view>
-            </view>
-          </view>
-          <view class="sub-block" wx:if="{{ch.errors.length}}">
-            <text class="sub-title sub-title-errors">避坑</text>
-            <view class="chapter-list">
-              <view wx:for="{{ch.errors}}" wx:for-item="line" wx:for-index="i" wx:key="i" class="chapter-line">
-                <text class="line-dot line-dot-errors">✗</text>
-                <text class="line-text">{{line}}</text>
-              </view>
-            </view>
-          </view>
-          <view class="sub-block" wx:if="{{ch.tips.length}}">
-            <text class="sub-title sub-title-tips">建议</text>
-            <view class="chapter-list">
-              <view wx:for="{{ch.tips}}" wx:for-item="line" wx:for-index="i" wx:key="i" class="chapter-line">
-                <text class="line-dot line-dot-tips">✓</text>
-                <text class="line-text">{{line}}</text>
-              </view>
-            </view>
-          </view>
-        </block>
+  <view wx:if="{{!loading && !list.length}}" class="empty">
+    <view class="empty-icon">🏸</view>
+    <text class="empty-text">还没有装备</text>
+    <text class="text-light">可在后台录入装备，或在装备详情页申请补充</text>
+  </view>
+
+  <view wx:for="{{list}}" wx:key="_id" class="gear-item" data-id="{{item._id}}" bindtap="goGearDetail">
+    <image wx:if="{{item.cover_file_id}}" class="gear-cover" src="{{item.cover_file_id}}" mode="aspectFill" />
+    <view wx:else class="gear-cover gear-cover-ph">🏸</view>
+    <view class="gear-info">
+      <view class="gear-name-row">
+        <text class="gear-name">{{item.name}}</text>
+        <text class="gear-cat-tag">{{item.category_name}}</text>
+      </view>
+      <text class="gear-brand text-light" wx:if="{{item.brand}}">{{item.brand}}</text>
+      <view class="gear-meta">
+        <text class="gear-score" style="color:{{item.score_color}};">★ {{item.score_text}}</text>
+        <text class="gear-count text-light">{{item.review_count}} 条评测</text>
       </view>
     </view>
   </view>
 
-  <view class="guide-footer text-light">
-    装备是辅助，动作规范和科学训练才是根本
-  </view>
+  <view wx:if="{{hasMore}}" class="loading-more text-light">加载中...</view>
+  <view wx:if="{{!loading && list.length && !hasMore}}" class="loading-more text-light">— 没有更多了 —</view>
 </view>

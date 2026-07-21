@@ -164,5 +164,29 @@
     </block>
   </view>
 
+  <!-- 打球记录入口 -->
+  <view class="card" bindtap="goRecord">
+    <view class="entry-row">
+      <text class="entry-icon">📝</text>
+      <view class="entry-info">
+        <text class="entry-title">打球记录</text>
+        <text class="entry-desc text-light">记一笔 · 看成长 · 历史记录</text>
+      </view>
+      <text class="entry-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 意见反馈入口 -->
+  <view class="card" bindtap="goFeedback">
+    <view class="entry-row">
+      <text class="entry-icon">💬</text>
+      <view class="entry-info">
+        <text class="entry-title">意见反馈</text>
+        <text class="entry-desc text-light">反馈问题 · 提需求 · 帮我们做得更好</text>
+      </view>
+      <text class="entry-arrow">›</text>
+    </view>
+  </view>
+
   <view class="footer text-light">羽球手记 · 坚持比完美更重要</view>
 </view>

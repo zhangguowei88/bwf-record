@@ -50,6 +50,12 @@
       <text class="score-desc">{{report.scoreDesc}}</text>
     </view>
 
+    <!-- 原始视频 -->
+    <view class="card" wx:if="{{report.video_file_id}}">
+      <view class="card-title"><text>原始挥拍视频</text></view>
+      <video class="video-preview" src="{{report.video_file_id}}" controls objectFit="contain"></video>
+    </view>
+
     <!-- 骨骼轨迹 -->
     <view class="card">
       <view class="card-title"><text>关键帧骨骼轨迹</text></view>

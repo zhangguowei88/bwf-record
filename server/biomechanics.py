@@ -246,6 +246,8 @@ def dtw_score(landmarks_seq, template, side='r'):
     user_shoulder = _angle_series(landmarks_seq, hip, sh, el)
     user_wrist_y = [s['landmarks'][wr]['y'] for s in landmarks_seq]
 
+    has_tmpl = bool(template.get('elbow_angle')) or bool(template.get('shoulder_angle')) or bool(template.get('wrist_y'))
+
     def norm_dist(user, tmpl):
         if not user or not tmpl:
             return 1.0
@@ -253,6 +255,35 @@ def dtw_score(landmarks_seq, template, side='r'):
         # 归一化到 0-1（角度差，经验上限 60°）
         return min(1.0, d / 60.0)
 
+    # ---- 无标准模板：走"自身动作质量"兜底打分 ----
+    # 思路：没有外部参照时，根据骨骼点提取稳定性 + 动作幅度，给合理基础分。
+    # 这样未标定时分数不为 0，且仍能被错误规则扣分，反映动作质量。
+    if not has_tmpl:
+        # 1. 有效帧比例（可见度高 = 提取稳定）
+        n = len(landmarks_seq)
+        if n == 0:
+            return 0.0
+        vis_ok = 0
+        for fr in landmarks_seq:
+            lms = fr['landmarks']
+            # 主手侧肩肘腕可见性
+            if (lms[sh]['visibility'] >= 0.5 and lms[el]['visibility'] >= 0.5
+                    and lms[wr]['visibility'] >= 0.5):
+                vis_ok += 1
+        vis_ratio = vis_ok / n  # 0-1
+
+        # 2. 动作幅度（手腕 y 坐标变化范围，归一化）
+        if user_wrist_y and max(user_wrist_y) > min(user_wrist_y):
+            amp = max(user_wrist_y) - min(user_wrist_y)
+            amp_score = min(1.0, amp / 0.35)  # 0.35 作为挥拍幅度经验值
+        else:
+            amp_score = 0.0
+
+        # 基础分 55-80 区间：可见度为主，幅度为辅
+        base = 55 + vis_ratio * 20 + amp_score * 5
+        return round(max(0.0, min(100.0, base)), 1)
+
+    # ---- 有标准模板：DTW 比对 ----
     d_elbow = norm_dist(user_elbow, template.get('elbow_angle', []))
     d_shoulder = norm_dist(user_shoulder, template.get('shoulder_angle', []))
     d_wrist = norm_dist(user_wrist_y, template.get('wrist_y', []))

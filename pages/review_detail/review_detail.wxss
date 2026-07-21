@@ -1,0 +1,69 @@
+/* pages/review_detail/review_detail.wxss */
+
+.rd-gear-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+.rd-gear-label { font-size: 24rpx; }
+.rd-gear-name { flex: 1; font-size: 30rpx; font-weight: 600; color: var(--c-text); }
+.rd-arrow { font-size: 36rpx; color: var(--c-text-light); }
+
+.rd-head {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+.rd-avatar {
+  width: 72rpx; height: 72rpx; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 30rpx; flex-shrink: 0;
+}
+.rd-author { flex: 1; display: flex; flex-direction: column; }
+.rd-name { font-size: 30rpx; font-weight: 500; }
+.rd-time { font-size: 22rpx; }
+.rd-score-box { text-align: center; }
+.rd-score { display: block; font-size: 36rpx; font-weight: 700; color: #f59e0b; }
+.rd-star-text { font-size: 22rpx; color: var(--c-text-light); }
+
+.pending-card { background: #fffbeb; }
+
+.rd-content {
+  display: block;
+  font-size: 30rpx;
+  color: var(--c-text);
+  line-height: 1.6;
+}
+
+/* 九宫格（复用 feed 样式） */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8rpx;
+}
+.media-cell {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  border-radius: 12rpx;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+.media-cell-img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.media-cell-play {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  color: #fff; font-size: 40rpx; text-shadow: 0 2rpx 8rpx rgba(0,0,0,0.6);
+}
+
+/* 维度条形图 */
+.bar-item { display: flex; align-items: center; gap: 16rpx; padding: 10rpx 0; }
+.bar-name { width: 140rpx; font-size: 26rpx; color: var(--c-text-sub); flex-shrink: 0; }
+.bar-track { flex: 1; height: 16rpx; background: #f3f4f6; border-radius: 8rpx; overflow: hidden; }
+.bar-fill { height: 100%; background: #f59e0b; border-radius: 8rpx; }
+.bar-score { width: 50rpx; text-align: right; font-size: 26rpx; font-weight: 600; }
+
+/* 用户画像标签 */
+.rd-user-tags { display: flex; flex-wrap: wrap; gap: 10rpx; margin-top: 16rpx; }
+.rd-injury-tag { font-size: 22rpx; color: #ef4444; background: #fef2f2; padding: 4rpx 14rpx; border-radius: 8rpx; }

@@ -1,5 +1,6 @@
 {
   "usingComponents": {},
-  "navigationBarTitleText": "装备指南",
-  "backgroundColor": "#f5f7fa"
+  "navigationBarTitleText": "装备评测",
+  "backgroundColor": "#f5f7fa",
+  "enablePullDownRefresh": true
 }

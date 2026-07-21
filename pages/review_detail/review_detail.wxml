@@ -1,0 +1,83 @@
+<!-- pages/review_detail/review_detail.wxml -->
+<view class="container safe-bottom">
+
+  <view wx:if="{{!r}}" class="loading-wrap">
+    <view class="loading-spinner"></view>
+    <text class="text-light">加载中...</text>
+  </view>
+
+  <block wx:if="{{r}}">
+    <!-- 装备入口 -->
+    <view class="card" bindtap="goGear">
+      <view class="rd-gear-row">
+        <text class="rd-gear-label text-light">评测装备</text>
+        <text class="rd-gear-name">{{r.gear_name}}</text>
+        <text class="rd-arrow">›</text>
+      </view>
+    </view>
+
+    <!-- 作者 + 评分 -->
+    <view class="card">
+      <view class="rd-head">
+        <view class="rd-avatar" style="background:{{r.author.badminton_level >= 3 ? '#10b981' : '#3b82f6'}};">
+          <text>{{r.is_mine ? '我' : (r.author.nick_name ? r.author.nick_name[0] : '球')}}</text>
+        </view>
+        <view class="rd-author">
+          <text class="rd-name">{{r.is_mine ? '我' : r.author.nick_name}}</text>
+          <text class="text-light rd-time">{{r.time_text}} · {{r.level_name}} {{r.style_name}} · 使用 {{r.duration_months}} 月</text>
+        </view>
+        <view class="rd-score-box">
+          <text class="rd-score">{{r.score}}</text>
+          <text class="rd-star-text">{{r.star_text}}</text>
+        </view>
+      </view>
+      <view class="rd-user-tags" wx:if="{{r.user_profile.injuries.length}}">
+        <text wx:for="{{r.user_profile.injuries}}" wx:key="*this" class="rd-injury-tag">{{item}}</text>
+      </view>
+    </view>
+
+    <!-- 待审核提示 -->
+    <view class="card pending-card" wx:if="{{r.status === 'pending_review'}}">
+      <text class="text-warn">⚠️ 该评测含待审核内容，仅你自己可见，审核通过后公开展示</text>
+    </view>
+
+    <!-- 维度条形图 -->
+    <view class="card" wx:if="{{dimBars.length}}">
+      <view class="card-title"><text>维度评分</text></view>
+      <view wx:for="{{dimBars}}" wx:key="name" class="bar-item">
+        <text class="bar-name">{{item.name}}</text>
+        <view class="bar-track"><view class="bar-fill" style="width:{{item.pct}}%;"></view></view>
+        <text class="bar-score">{{item.score}}</text>
+      </view>
+    </view>
+
+    <!-- 正文 -->
+    <view class="card">
+      <view class="card-title"><text>{{r.review_type === 'long' ? '评测正文' : '点评'}}</text></view>
+      <text class="rd-content">{{r.content}}</text>
+    </view>
+
+    <view class="card" wx:if="{{r.review_type === 'long' && r.pros}}">
+      <view class="card-title"><text>✅ 优点</text></view>
+      <text class="rd-content">{{r.pros}}</text>
+    </view>
+    <view class="card" wx:if="{{r.review_type === 'long' && r.cons}}">
+      <view class="card-title"><text>❌ 缺点</text></view>
+      <text class="rd-content">{{r.cons}}</text>
+    </view>
+
+    <!-- 九宫格媒体 -->
+    <view class="card" wx:if="{{r.media.length}}">
+      <view class="card-title"><text>图片/视频</text></view>
+      <view class="media-grid">
+        <view wx:for="{{r.media}}" wx:for-item="m" wx:key="file_id" class="media-cell" data-idx="{{index}}" bindtap="previewMedia">
+          <image wx:if="{{m.type === 'image'}}" class="media-cell-img" src="{{m.file_id}}" mode="aspectFill" />
+          <block wx:else>
+            <video class="media-cell-img" src="{{m.file_id}}" object-fit="cover" muted controls="{{false}}" />
+            <view class="media-cell-play">▶</view>
+          </block>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

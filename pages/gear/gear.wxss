@@ -1,43 +1,106 @@
-/* pages/gear/gear.wxss — 装备指南 */
+/* pages/gear/gear.wxss — 装备评测主页 */
 
-.guide-header { padding: 16rpx 8rpx 28rpx; }
-.guide-title { font-size: 40rpx; font-weight: 700; color: #1f2937; display: block; margin-bottom: 8rpx; }
-.guide-sub { font-size: 26rpx; }
-
-.section-card { padding: 0; overflow: hidden; }
-.section-head {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 28rpx 32rpx;
+.search-bar {
+  margin-bottom: 16rpx;
 }
-.section-head-left { display: flex; align-items: center; gap: 20rpx; }
-.section-icon { font-size: 44rpx; }
-.section-head-info { display: flex; flex-direction: column; gap: 6rpx; }
-.section-title { font-size: 32rpx; font-weight: 600; color: #1f2937; }
-.section-desc { font-size: 24rpx; }
-.section-arrow { font-size: 40rpx; color: #9ca3af; transition: transform 0.25s; }
-.section-arrow.expanded { transform: rotate(90deg); }
-
-.section-body { padding: 0 32rpx 28rpx; }
-
-.chapter { padding: 20rpx 0; border-top: 1rpx solid #f5f6f8; }
-.chapter:first-child { border-top: none; }
-.chapter-title { font-size: 28rpx; font-weight: 600; color: #10b981; display: block; margin-bottom: 14rpx; }
-.chapter-list { display: flex; flex-direction: column; gap: 10rpx; }
-.chapter-line { display: flex; gap: 10rpx; }
-.line-dot { color: #10b981; font-size: 26rpx; line-height: 1.6; flex-shrink: 0; }
-.line-text { font-size: 26rpx; color: #374151; line-height: 1.7; flex: 1; }
-
-.sub-block { margin-bottom: 20rpx; }
-.sub-block:last-child { margin-bottom: 0; }
-.sub-title {
-  display: block; font-size: 24rpx; font-weight: 600;
-  margin-bottom: 10rpx; padding-left: 12rpx; border-left: 4rpx solid;
+.search-input {
+  width: 100%;
+  height: 72rpx;
+  padding: 0 24rpx;
+  background: #fff;
+  border-radius: 36rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+  box-shadow: var(--shadow);
 }
-.sub-title-points { color: #059669; border-color: #10b981; }
-.sub-title-errors { color: #b91c1c; border-color: #ef4444; }
-.sub-title-tips { color: #1d4ed8; border-color: #3b82f6; }
-.line-dot-points { color: #10b981; }
-.line-dot-errors { color: #ef4444; }
-.line-dot-tips { color: #3b82f6; }
 
-.guide-footer { text-align: center; padding: 32rpx 16rpx; font-size: 22rpx; line-height: 1.6; }
+.cat-scroll {
+  white-space: nowrap;
+  margin-bottom: 16rpx;
+}
+.cat-tabs {
+  display: inline-flex;
+  gap: 16rpx;
+  padding: 0 4rpx;
+}
+.cat-tab {
+  display: inline-block;
+  padding: 12rpx 28rpx;
+  border-radius: 32rpx;
+  background: #fff;
+  color: var(--c-text-sub);
+  font-size: 26rpx;
+  white-space: nowrap;
+}
+.cat-tab.active {
+  background: var(--c-primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* 装备卡片 */
+.gear-item {
+  display: flex;
+  gap: 20rpx;
+  background: var(--c-card);
+  border-radius: var(--radius);
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: var(--shadow);
+}
+.gear-cover {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 16rpx;
+  flex-shrink: 0;
+  background: #f3f4f6;
+}
+.gear-cover-ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60rpx;
+}
+.gear-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.gear-name-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+.gear-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--c-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.gear-cat-tag {
+  font-size: 20rpx;
+  color: var(--c-primary-dark);
+  background: var(--c-primary-light);
+  padding: 2rpx 12rpx;
+  border-radius: 8rpx;
+  flex-shrink: 0;
+}
+.gear-brand {
+  font-size: 24rpx;
+}
+.gear-meta {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+.gear-score {
+  font-size: 28rpx;
+  font-weight: 600;
+}
+.gear-count {
+  font-size: 24rpx;
+}

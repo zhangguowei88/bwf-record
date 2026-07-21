@@ -7,7 +7,11 @@
     "pages/guide/guide",
     "pages/gear/gear",
     "pages/feed/feed",
-    "pages/coach/coach"
+    "pages/coach/coach",
+    "pages/feedback/feedback",
+    "pages/gear_detail/gear_detail",
+    "pages/review_edit/review_edit",
+    "pages/review_detail/review_detail"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ffffff",
@@ -28,8 +32,8 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/record/record",
-        "text": "记录"
+        "pagePath": "pages/gear/gear",
+        "text": "装备"
       },
       {
         "pagePath": "pages/profile/profile",

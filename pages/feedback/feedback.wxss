@@ -1,0 +1,132 @@
+/* pages/feedback/feedback.wxss — 意见反馈 */
+
+.form-item {
+  margin-top: 24rpx;
+}
+.form-label {
+  display: block;
+  font-size: 26rpx;
+  color: var(--c-text-sub);
+  margin-bottom: 12rpx;
+}
+
+/* 类型卡片 */
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16rpx;
+}
+.cat-card {
+  padding: 20rpx;
+  border-radius: 16rpx;
+  background: #f3f4f6;
+  border: 2rpx solid transparent;
+}
+.cat-card.active {
+  background: var(--c-primary-light);
+  border-color: var(--c-primary);
+}
+.cat-name {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--c-text);
+  margin-bottom: 4rpx;
+}
+.cat-card.active .cat-name {
+  color: var(--c-primary-dark);
+}
+.cat-desc {
+  font-size: 22rpx;
+}
+
+/* 文本框 */
+.form-textarea {
+  width: 100%;
+  min-height: 200rpx;
+  padding: 20rpx;
+  border-radius: 16rpx;
+  background: #f3f4f6;
+  font-size: 28rpx;
+  color: var(--c-text);
+  box-sizing: border-box;
+}
+.char-count {
+  display: block;
+  text-align: right;
+  font-size: 22rpx;
+  margin-top: 8rpx;
+}
+.form-input {
+  width: 100%;
+  padding: 20rpx;
+  border-radius: 16rpx;
+  background: #f3f4f6;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+/* 历史反馈项 */
+.fb-item {
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid var(--c-border);
+}
+.fb-item:last-child {
+  border-bottom: none;
+}
+.fb-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+.fb-cat {
+  font-size: 24rpx;
+  color: var(--c-primary-dark);
+  background: var(--c-primary-light);
+  padding: 4rpx 16rpx;
+  border-radius: 12rpx;
+}
+.fb-status {
+  font-size: 22rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 12rpx;
+}
+.fb-status-open {
+  color: var(--c-text-light);
+  background: #f3f4f6;
+}
+.fb-status-processing {
+  color: var(--c-warn);
+  background: #fffbeb;
+}
+.fb-status-done {
+  color: var(--c-primary);
+  background: var(--c-primary-light);
+}
+.fb-content {
+  display: block;
+  font-size: 28rpx;
+  color: var(--c-text);
+  line-height: 1.5;
+  margin-bottom: 8rpx;
+}
+.fb-time {
+  font-size: 22rpx;
+}
+
+/* 空状态 */
+.empty {
+  text-align: center;
+  padding: 80rpx 0;
+}
+.empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 16rpx;
+}
+.empty-text {
+  display: block;
+  font-size: 28rpx;
+  color: var(--c-text-sub);
+  margin-bottom: 8rpx;
+}

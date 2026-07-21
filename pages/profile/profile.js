@@ -212,6 +212,16 @@ Page({
       wx.showToast({ title: e.message || '保存失败', icon: 'none' })
     }
   },
+
+  /** 打球记录 */
+  goRecord() {
+    wx.navigateTo({ url: '/pages/record/record' })
+  },
+
+  /** 意见反馈 */
+  goFeedback() {
+    wx.navigateTo({ url: '/pages/feedback/feedback' })
+  },
 })
 
 function currentYM() {

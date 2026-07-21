@@ -122,7 +122,7 @@ async function doAnalyze(event, userId, openid) {
       },
     })
 
-    return { code: 0, msg: 'success', data: { report_id: reportId, ...data } }
+    return { code: 0, msg: 'success', data: { report_id: reportId, video_file_id: file_id, ...data } }
   } catch (e) {
     // 回写 fail
     await db.collection('action_report').doc(reportId).update({

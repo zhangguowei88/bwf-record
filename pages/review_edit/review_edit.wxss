@@ -1,0 +1,165 @@
+/* pages/review_edit/review_edit.wxss */
+
+.rv-gear-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--c-text);
+}
+
+.type-row {
+  display: flex;
+  gap: 16rpx;
+}
+.type-chip {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 0;
+  border-radius: 32rpx;
+  background: #f3f4f6;
+  color: var(--c-text-sub);
+  font-size: 28rpx;
+}
+.type-chip.active {
+  background: var(--c-primary-light);
+  color: var(--c-primary-dark);
+  font-weight: 600;
+}
+
+/* 星级 */
+.star-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+.star {
+  font-size: 64rpx;
+  color: #d1d5db;
+}
+.star.on {
+  color: #f59e0b;
+}
+.star-text {
+  font-size: 26rpx;
+  margin-left: 12rpx;
+}
+
+.form-input {
+  width: 100%;
+  padding: 20rpx;
+  border-radius: 16rpx;
+  background: #f3f4f6;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+.form-textarea {
+  width: 100%;
+  min-height: 160rpx;
+  padding: 20rpx;
+  border-radius: 16rpx;
+  background: #f3f4f6;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+.char-count {
+  display: block;
+  text-align: right;
+  font-size: 22rpx;
+  margin-top: 8rpx;
+}
+
+/* media picker（复用 record 样式） */
+.media-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-top: 12rpx;
+}
+.media-thumb, .media-add {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  position: relative;
+}
+.media-thumb { background: #f3f4f6; }
+.media-thumb-img { width: 100%; height: 100%; }
+.media-thumb-video { width: 100%; height: 100%; position: relative; background: #000; }
+.media-play {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  color: #fff; font-size: 36rpx; text-shadow: 0 2rpx 8rpx rgba(0,0,0,0.6);
+}
+.media-mask {
+  position: absolute; inset: 0; background: rgba(0,0,0,0.5);
+  color: #fff; font-size: 22rpx; display: flex; align-items: center; justify-content: center;
+}
+.media-del {
+  position: absolute; top: -8rpx; right: -8rpx; width: 36rpx; height: 36rpx;
+  border-radius: 50%; background: rgba(0,0,0,0.6); color: #fff; font-size: 28rpx;
+  display: flex; align-items: center; justify-content: center; line-height: 1;
+}
+.media-add {
+  background: #f3f4f6; border: 2rpx dashed #d1d5db; color: #9ca3af; font-size: 56rpx;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* 使用承诺 */
+.verify-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  border: 2rpx solid var(--c-border);
+}
+.verify-card.on {
+  border-color: var(--c-primary);
+  background: var(--c-primary-light);
+}
+.verify-check {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  border: 2rpx solid var(--c-text-light);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  flex-shrink: 0;
+}
+.verify-card.on .verify-check {
+  background: var(--c-primary);
+  border-color: var(--c-primary);
+}
+.verify-text {
+  font-size: 26rpx;
+  color: var(--c-text-sub);
+  line-height: 1.5;
+  flex: 1;
+}
+.verify-card.on .verify-text {
+  color: var(--c-primary-dark);
+}
+
+/* 维度打分 */
+.dim-item { padding: 16rpx 0; border-bottom: 1rpx solid var(--c-border); }
+.dim-item:last-child { border-bottom: none; }
+.dim-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12rpx; }
+.dim-name { font-size: 28rpx; color: var(--c-text); }
+.dim-score { font-size: 32rpx; font-weight: 700; color: #f59e0b; }
+.dim-stars { display: flex; gap: 10rpx; flex-wrap: wrap; }
+.dim-dot {
+  width: 56rpx; height: 56rpx; border-radius: 50%;
+  background: #f3f4f6; color: var(--c-text-light);
+  font-size: 24rpx; display: flex; align-items: center; justify-content: center;
+}
+.dim-dot.on { background: #f59e0b; color: #fff; font-weight: 600; }
+
+/* chip（页面级，复用 record 模式） */
+.chip-row { display: flex; flex-wrap: wrap; gap: 16rpx; margin-top: 12rpx; }
+.chip {
+  padding: 14rpx 28rpx; border-radius: 32rpx; background: #f3f4f6;
+  color: var(--c-text-sub); font-size: 26rpx;
+}
+.chip-active { background: var(--c-primary-light); color: var(--c-primary-dark); font-weight: 600; }
+
+.form-item { margin-top: 24rpx; }
+.form-label { display: block; font-size: 26rpx; color: var(--c-text-sub); }

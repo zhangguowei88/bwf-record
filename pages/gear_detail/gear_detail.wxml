@@ -1,0 +1,179 @@
+<!-- pages/gear_detail/gear_detail.wxml — 4Tab 装备详情 -->
+<view class="container safe-bottom">
+
+  <view wx:if="{{!gear}}" class="loading-wrap">
+    <view class="loading-spinner"></view>
+    <text class="text-light">加载中...</text>
+  </view>
+
+  <block wx:if="{{gear}}">
+    <!-- 装备头 -->
+    <view class="card gear-head-card">
+      <view class="gear-head-row">
+        <image wx:if="{{gear.cover_file_id}}" class="gear-cover-lg" src="{{gear.cover_file_id}}" mode="aspectFill" />
+        <view wx:else class="gear-cover-lg gear-cover-ph">🏸</view>
+        <view class="gear-head-info">
+          <text class="gear-title">{{gear.name}}</text>
+          <text class="text-light" wx:if="{{gear.brand}}">{{gear.brand}}</text>
+          <view class="gear-tag-row">
+            <text class="gear-cat-tag">{{gear.category_name}}</text>
+            <text class="gear-cat-tag" wx:if="{{gear.tier_name}}">{{gear.tier_name}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="gear-stat">
+        <view class="gear-stat-num" style="color:{{gear.score_color}};">{{gear.score_text}}</view>
+        <view class="gear-stat-label text-light">综合分</view>
+      </view>
+    </view>
+
+    <!-- 三色评分 + 价格 -->
+    <view class="card score-bar-card">
+      <view class="score-bar-item">
+        <text class="score-bar-num" style="color:#3b82f6;">{{gear.official_score_text || '—'}}</text>
+        <text class="score-bar-label text-light">平台实测</text>
+      </view>
+      <view class="score-bar-div"></view>
+      <view class="score-bar-item">
+        <text class="score-bar-num" style="color:#f59e0b;">{{gear.score_text}}</text>
+        <text class="score-bar-label text-light">综合众测</text>
+      </view>
+      <view class="score-bar-div"></view>
+      <view class="score-bar-item">
+        <text class="score-bar-num">{{gear.price_text || '—'}}</text>
+        <text class="score-bar-label text-light">日常入手价</text>
+      </view>
+    </view>
+
+    <!-- 伤病提醒 -->
+    <view class="card injury-card" wx:if="{{gear.injury_tags.length}}">
+      <view class="card-title"><text>⚠️ 人群提醒</text></view>
+      <view class="injury-tags">
+        <text wx:for="{{gear.injury_tags}}" wx:key="*this" class="injury-tag">{{item}}</text>
+      </view>
+    </view>
+
+    <!-- Tab -->
+    <view class="tab-bar">
+      <view wx:for="{{tabs}}" wx:key="*this"
+        class="tab-item {{tab === index ? 'active' : ''}}"
+        data-idx="{{index}}" bindtap="switchTab">{{item}}</view>
+    </view>
+
+    <!-- Tab0 基础参数 -->
+    <view class="card" wx:if="{{tab === 0}}">
+      <view class="card-title"><text>基础参数</text></view>
+      <view class="metric-row" wx:if="{{gear.spec.weight_g}}">
+        <text class="metric-label">重量</text><text class="metric-value">{{gear.spec.weight_g}}g ({{gear.spec.u_weight || ''}})</text>
+      </view>
+      <view class="metric-row" wx:if="{{gear.spec.balance_point}}">
+        <text class="metric-label">平衡点</text><text class="metric-value">{{gear.spec.balance_point}}</text>
+      </view>
+      <view class="metric-row" wx:if="{{gear.spec.shaft_hardness}}">
+        <text class="metric-label">中杆硬度</text><text class="metric-value">{{gear.spec.shaft_hardness}}</text>
+      </view>
+      <view class="metric-row" wx:if="{{gear.spec.tension}}">
+        <text class="metric-label">建议磅数</text><text class="metric-value">{{gear.spec.tension}}</text>
+      </view>
+      <view class="metric-row" wx:if="{{gear.spec.frame}}">
+        <text class="metric-label">框型</text><text class="metric-value">{{gear.spec.frame}}</text>
+      </view>
+      <view class="metric-row" wx:if="{{gear.spec.last}}">
+        <text class="metric-label">楦型</text><text class="metric-value">{{gear.spec.last}}</text>
+      </view>
+      <view class="metric-row" wx:if="{{gear.spec.carbon}}">
+        <text class="metric-label">碳板</text><text class="metric-value">{{gear.spec.carbon}}</text>
+      </view>
+      <view class="metric-row" wx:if="{{gear.spec.feather}}">
+        <text class="metric-label">毛片</text><text class="metric-value">{{gear.spec.feather}}</text>
+      </view>
+      <view class="metric-row" wx:if="{{gear.spec.speed}}">
+        <text class="metric-label">球速</text><text class="metric-value">{{gear.spec.speed}}</text>
+      </view>
+      <view wx:if="{{!gear.spec.weight_g && !gear.spec.balance_point && !gear.spec.feather}}" class="empty-text text-light">暂无详细参数</view>
+    </view>
+
+    <!-- Tab1 平台实测 -->
+    <block wx:if="{{tab === 1}}">
+      <view class="card" wx:if="{{officialDims.length}}">
+        <view class="card-title"><text>维度评分（官方）</text></view>
+        <view wx:for="{{officialDims}}" wx:key="name" class="bar-item">
+          <text class="bar-name">{{item.name}}</text>
+          <view class="bar-track"><view class="bar-fill official" style="width:{{item.pct}}%;"></view></view>
+          <text class="bar-score">{{item.score}}</text>
+        </view>
+      </view>
+      <view class="card" wx:if="{{gear.official && gear.official.pros}}">
+        <view class="card-title"><text>✅ 实测优点</text></view>
+        <text class="rd-content">{{gear.official.pros}}</text>
+      </view>
+      <view class="card" wx:if="{{gear.official && gear.official.cons}}">
+        <view class="card-title"><text>❌ 实测硬伤</text></view>
+        <text class="rd-content">{{gear.official.cons}}</text>
+      </view>
+      <view class="card" wx:if="{{gear.official && gear.official.content}}">
+        <view class="card-title"><text>实测结论</text></view>
+        <text class="rd-content">{{gear.official.content}}</text>
+        <view class="official-meta text-light" wx:if="{{gear.official.tester}}">测试：{{gear.official.tester}} · {{gear.official.test_env}}</view>
+      </view>
+      <view wx:if="{{!officialDims.length}}" class="empty">
+        <view class="empty-icon">📋</view>
+        <text class="empty-text">暂无官方实测</text>
+        <text class="text-light">平台实测产出中</text>
+      </view>
+    </block>
+
+    <!-- Tab2 第三方 -->
+    <block wx:if="{{tab === 2}}">
+      <view class="card" wx:for="{{thirdpartyList}}" wx:key="_id">
+        <view class="card-title">
+          <text>来源：{{item.source_name}}</text>
+          <text class="text-light">{{item.time_text}}</text>
+        </view>
+        <text class="rd-content" wx:if="{{item.data_summary}}">{{item.data_summary}}</text>
+        <text class="rd-content text-sub" wx:if="{{item.pros}}">✅ {{item.pros}}</text>
+        <text class="rd-content text-sub" wx:if="{{item.cons}}">❌ {{item.cons}}</text>
+      </view>
+      <view wx:if="{{!thirdpartyList.length}}" class="empty">
+        <view class="empty-icon">📰</view>
+        <text class="empty-text">暂无第三方参考</text>
+      </view>
+    </block>
+
+    <!-- Tab3 用户众测 -->
+    <block wx:if="{{tab === 3}}">
+      <button class="btn btn-primary btn-block" bindtap="goWriteReview">
+        {{myReview ? '修改我的评测' : '写评测'}}
+      </button>
+      <view wx:for="{{reviews}}" wx:key="_id" class="card rv-card" data-id="{{item._id}}" bindtap="goReviewDetail">
+        <view class="rv-head">
+          <view class="rv-avatar" style="background:{{item.author.badminton_level >= 3 ? '#10b981' : '#3b82f6'}};">
+            <text>{{item.is_mine ? '我' : (item.author.nick_name ? item.author.nick_name[0] : '球')}}</text>
+          </view>
+          <view class="rv-author">
+            <text class="rv-name">{{item.is_mine ? '我' : item.author.nick_name}}</text>
+            <text class="text-light rv-time">{{item.level_name}} {{item.style_name}} · {{item.time_text}}</text>
+          </view>
+          <text class="rv-score">★ {{item.score}}</text>
+        </view>
+        <text class="rv-content">{{item.content}}</text>
+        <!-- 分项条形图（简化：前4项） -->
+        <view class="rv-bars">
+          <view wx:for="{{item.dim_bars}}" wx:for-item="b" wx:if="{{index < 4}}" wx:key="name" class="mini-bar">
+            <text class="mini-bar-name text-light">{{b.name}}</text>
+            <view class="mini-bar-track"><view class="mini-bar-fill" style="width:{{b.pct}}%;"></view></view>
+          </view>
+        </view>
+        <view class="rv-tags">
+          <text class="rv-type-tag">{{item.review_type === 'long' ? '深度' : '快速'}}</text>
+          <text class="rv-dur text-light">使用 {{item.duration_months}} 月</text>
+        </view>
+      </view>
+      <view wx:if="{{!reviews.length}}" class="empty">
+        <view class="empty-icon">✍️</view>
+        <text class="empty-text">还没有用户评测</text>
+        <text class="text-light">来写第一条</text>
+      </view>
+    </block>
+  </block>
+</view>

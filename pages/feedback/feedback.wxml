@@ -1,0 +1,54 @@
+<!-- pages/feedback/feedback.wxml — 意见反馈 -->
+<view class="container safe-bottom">
+
+  <!-- 反馈表单 -->
+  <view class="card">
+    <view class="card-title"><text>写下你的反馈</text></view>
+
+    <!-- 类型 -->
+    <view class="form-item">
+      <text class="form-label">反馈类型</text>
+      <view class="cat-grid">
+        <view wx:for="{{categories}}" wx:key="value"
+          class="cat-card {{category === item.value ? 'active' : ''}}"
+          data-value="{{item.value}}" bindtap="pickCategory">
+          <text class="cat-name">{{item.name}}</text>
+          <text class="cat-desc text-light">{{item.desc}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 内容 -->
+    <view class="form-item">
+      <text class="form-label">详细描述</text>
+      <textarea class="form-textarea" value="{{content}}" bindinput="onContentInput"
+        placeholder="遇到的问题、想要的功能、改进建议... 写得越详细我们越能帮到你"
+        maxlength="1000" auto-height></textarea>
+      <text class="char-count text-light">{{content.length || 0}}/1000</text>
+    </view>
+
+
+    <button class="btn btn-primary btn-block" bindtap="submit"
+      loading="{{submitting}}" disabled="{{submitting}}">提交反馈</button>
+  </view>
+
+  <!-- 我的反馈历史 -->
+  <view class="card" wx:if="{{list.length}}">
+    <view class="card-title"><text>我的反馈</text></view>
+    <view wx:for="{{list}}" wx:key="_id" class="fb-item">
+      <view class="fb-head">
+        <text class="fb-cat">{{item.category_name}}</text>
+        <text class="fb-status fb-status-{{item.status}}">{{item.status_text}}</text>
+      </view>
+      <text class="fb-content">{{item.content}}</text>
+      <text class="fb-time text-light">{{item.dateText}}</text>
+    </view>
+  </view>
+
+  <view wx:if="{{!loading && !list.length}}" class="empty">
+    <view class="empty-icon">💬</view>
+    <text class="empty-text">还没有反馈记录</text>
+    <text class="text-light">你的每条建议都会被认真对待</text>
+  </view>
+
+</view>
