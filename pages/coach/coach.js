@@ -18,13 +18,20 @@ Page({
     page: 1,
     hasMore: false,
     loading: false,
+    detailLoading: false,
   },
 
-  onLoad() {
-    this.loadList(true)
+  onLoad(options) {
+    if (options && options.report_id) {
+      this.loadDetail(options.report_id)
+    } else {
+      this.loadList(true)
+    }
   },
 
   onShow() {
+    // 详情模式不刷新列表
+    if (this.data.detailLoading || this.data.report) return
     if (this.data.reportList.length) this.loadList(true)
   },
 
@@ -191,6 +198,22 @@ Page({
       })
   },
 
+  /** 加载报告详情（从历史进入） */
+  async loadDetail(reportId) {
+    this.setData({ detailLoading: true })
+    wx.showLoading({ title: '加载中...', mask: true })
+    try {
+      const data = await call('coach', { type: 'detail', report_id: reportId })
+      wx.hideLoading()
+      this.setData({ detailLoading: false, report: this.decorateReport(data) })
+      this.drawSkeleton(data.skeleton_frames)
+    } catch (e) {
+      wx.hideLoading()
+      this.setData({ detailLoading: false })
+      wx.showToast({ title: e.message || '加载失败', icon: 'none' })
+    }
+  },
+
   /** 加载历史报告列表 */
   async loadList(reset) {
     const page = reset ? 1 : this.data.page + 1
@@ -228,5 +251,11 @@ Page({
     } catch (e) {
       // toast 已由 callWithToast 处理
     }
+  },
+
+  /** 查看历史报告详情 */
+  viewDetail(e) {
+    const id = e.currentTarget.dataset.id
+    wx.navigateTo({ url: `/pages/coach/coach?report_id=${id}` })
   },
 })

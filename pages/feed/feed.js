@@ -71,6 +71,18 @@ Page({
     return `${date.getMonth() + 1}/${date.getDate()}`
   },
 
+  // 预览媒体（九宫格点击）
+  previewFeedMedia(e) {
+    const { id, idx } = e.currentTarget.dataset
+    const item = this.data.list.find((x) => x._id === id)
+    if (!item || !item.media || !item.media.length) return
+    const sources = item.media.map((m) => ({
+      url: m.file_id,
+      type: m.type,   // 'image' | 'video'
+    }))
+    wx.previewMedia({ sources, current: Number(idx), showmenu: true })
+  },
+
   // 点赞
   async toggleLike(e) {
     const id = e.currentTarget.dataset.id

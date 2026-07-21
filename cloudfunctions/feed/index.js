@@ -78,6 +78,7 @@ exports.main = async (event, context) => {
     feeling: r.feeling,
     sore_parts: r.sore_parts || [],
     venue: r.venue || '',
+    media: Array.isArray(r.media) ? r.media : [],
     note: r.note || '',
     like_count: r.like_count || 0,
     comment_count: r.comment_count || 0,

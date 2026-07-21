@@ -42,6 +42,18 @@
       </view>
       <text wx:if="{{item.venue}}" class="feed-venue text-light">📍 {{item.venue}}</text>
       <text wx:if="{{item.note}}" class="feed-note">{{item.note}}</text>
+
+      <!-- 九宫格媒体 -->
+      <view wx:if="{{item.media.length}}" class="media-grid media-count-{{item.media.length}}">
+        <view wx:for="{{item.media}}" wx:for-item="m" wx:for-index="mi" wx:key="file_id"
+          class="media-cell" data-id="{{item._id}}" data-idx="{{mi}}" bindtap="previewFeedMedia">
+          <image wx:if="{{m.type === 'image'}}" class="media-cell-img" src="{{m.file_id}}" mode="aspectFill" />
+          <block wx:else>
+            <video class="media-cell-img" src="{{m.file_id}}" object-fit="cover" muted controls="{{false}}" autoplay="{{false}}" />
+            <view class="media-cell-play">▶</view>
+          </block>
+        </view>
+      </view>
     </view>
 
     <!-- 互动 -->

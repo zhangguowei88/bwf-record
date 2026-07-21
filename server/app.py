@@ -7,7 +7,7 @@ import urllib.request
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from pose import extract_landmarks, sample_skeleton_frames
+from pose import extract_landmarks, sample_skeleton_frames, detect_subject_info
 from biomechanics import segment, calc_metrics, dtw_score, LM
 from rules import check_errors, stage_scores, total_score
 
@@ -86,6 +86,9 @@ def analyze(req: AnalyzeReq):
         # 9. 关键帧骨架（前端 Canvas 用）
         skeleton_frames = sample_skeleton_frames(landmarks_seq, k=6)
 
+        # 10. 被识别者位置信息（标注画面中哪个人）
+        subject_info = detect_subject_info(landmarks_seq, side=side)
+
         return {
             'code': 0,
             'msg': 'success',
@@ -98,6 +101,7 @@ def analyze(req: AnalyzeReq):
                 'hit_frame': seg.get('hit_frame'),
                 'segment_confidence': seg.get('confidence', 0),
                 'main_side': side,
+                'subject_info': subject_info,
                 'frames_analyzed': len(landmarks_seq),
             },
         }

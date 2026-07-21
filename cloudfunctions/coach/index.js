@@ -116,6 +116,7 @@ async function doAnalyze(event, userId, openid) {
         skeleton_frames: data.skeleton_frames,
         hit_frame: data.hit_frame,
         segment_confidence: data.segment_confidence,
+        subject_info: data.subject_info,
         frames_analyzed: data.frames_analyzed,
         updated_at: db.serverDate(),
       },

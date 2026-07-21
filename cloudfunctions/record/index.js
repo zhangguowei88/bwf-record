@@ -57,7 +57,7 @@ exports.main = async (event, context) => {
 
   // === 修改记录 ===
   if (event.type === 'update') {
-    const { record_id, duration_min, intensity, feeling, sore_parts, venue, partners, note, is_shared } = event
+    const { record_id, duration_min, intensity, feeling, sore_parts, venue, partners, note, is_shared, media } = event
     if (!record_id) {
       return { code: -1, msg: '参数缺失', data: null }
     }
@@ -75,6 +75,7 @@ exports.main = async (event, context) => {
     if (Array.isArray(partners)) updateData.partners = partners
     if (note != null) updateData.note = note
     if (is_shared != null) updateData.is_shared = !!is_shared
+    if (Array.isArray(media)) updateData.media = media.slice(0, 9)
     await db.collection('manual_record').doc(record_id).update({ data: updateData })
     return { code: 0, msg: 'success', data: { updated: true } }
   }
@@ -97,7 +98,7 @@ exports.main = async (event, context) => {
   // === 打球记录录入 ===
   const {
     record_date, duration_min, intensity, feeling,
-    sore_parts, venue, partners, note, is_shared,
+    sore_parts, venue, partners, note, is_shared, media,
   } = event
 
   if (!record_date || !duration_min) {
@@ -129,6 +130,7 @@ exports.main = async (event, context) => {
       venue: venue || '',
       partners: Array.isArray(partners) ? partners : [],
       note: note || '',
+      media: Array.isArray(media) ? media.slice(0, 9) : [],
       is_shared: finalShared,
       like_count: 0,
       comment_count: 0,

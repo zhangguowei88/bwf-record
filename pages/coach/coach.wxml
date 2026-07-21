@@ -59,6 +59,20 @@
       <text class="upload-tip">绿色为最终挥拍姿态，半透明为过程关键帧</text>
     </view>
 
+    <!-- 被识别者标注 -->
+    <view class="card" wx:if="{{report.subject_info}}">
+      <view class="card-title"><text>🎯 识别对象</text></view>
+      <view class="metric-row">
+        <text class="metric-label">画面位置</text>
+        <text class="metric-value">{{report.subject_info.h_position_text}}</text>
+      </view>
+      <view class="metric-row">
+        <text class="metric-label">持拍手</text>
+        <text class="metric-value">{{report.subject_info.main_side_text}}</text>
+      </view>
+      <text class="upload-tip">单人识别模式，分析的是画面中最显著的人。若有多人，请确认 {{report.subject_info.h_position_text}} 是你要分析的对象。</text>
+    </view>
+
     <!-- 阶段分数 -->
     <view class="card">
       <view class="card-title"><text>动作阶段评分</text></view>
@@ -124,8 +138,8 @@
     <button class="btn btn-block" style="margin-top:16rpx;color:var(--c-text-sub);" bindtap="chooseVideo">再测一次</button>
   </block>
 
-  <!-- 历史报告 -->
-  <view class="card" wx:if="{{reportList.length}}">
+  <!-- 历史报告（详情模式不显示） -->
+  <view class="card" wx:if="{{reportList.length && !report}}">
     <view class="card-title"><text>历史诊断</text></view>
     <view wx:for="{{reportList}}" wx:key="_id" class="history-item" data-id="{{item._id}}" bindtap="viewDetail">
       <view class="history-left">

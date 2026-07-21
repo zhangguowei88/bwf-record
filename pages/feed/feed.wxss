@@ -113,3 +113,39 @@
   font-size: 28rpx; padding: 0;
 }
 .comment-send::after { border: none; }
+
+/* 九宫格媒体 */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8rpx;
+  margin-top: 16rpx;
+}
+/* 单图/单视频时不大图展示，保持格子统一 */
+.media-count-1 .media-cell,
+.media-count-2 .media-cell {
+  /* 仍用三列网格，前1-2个格子 */
+}
+.media-cell {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;   /* 正方形 */
+  border-radius: 12rpx;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+.media-cell-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.media-cell-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 40rpx;
+  text-shadow: 0 2rpx 8rpx rgba(0,0,0,0.6);
+}

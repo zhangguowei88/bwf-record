@@ -142,6 +142,23 @@
       <input class="form-input" value="{{form.note}}" bindinput="onNoteInput" placeholder="今天杀球感觉不错" />
     </view>
 
+    <!-- 图片/视频 -->
+    <view class="form-item">
+      <text class="form-label">图片/视频（可选，最多9个）</text>
+      <view class="media-picker">
+        <view wx:for="{{form.media}}" wx:key="tempPath" class="media-thumb">
+          <image wx:if="{{item.type === 'image'}}" class="media-thumb-img" src="{{item.tempPath}}" mode="aspectFill" data-idx="{{index}}" bindtap="previewFormMedia" />
+          <view wx:else class="media-thumb-video" data-idx="{{index}}" bindtap="previewFormMedia">
+            <video class="media-thumb-img" src="{{item.tempPath}}" object-fit="cover" muted autoplay="{{false}}" controls="{{false}}" />
+            <view class="media-play">▶</view>
+          </view>
+          <view wx:if="{{item.uploading}}" class="media-mask">上传中</view>
+          <view class="media-del" data-idx="{{index}}" catchtap="removeMedia">×</view>
+        </view>
+        <view wx:if="{{form.media.length < 9}}" class="media-add" bindtap="chooseMedia">+</view>
+      </view>
+    </view>
+
     <!-- 分享开关 -->
     <view class="form-item share-item">
       <view class="share-left">

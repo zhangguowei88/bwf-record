@@ -25,6 +25,7 @@ Page({
       venue: '',
       partners: '',
       note: '',
+      media: [],
       is_shared: true,
     },
     durationOptions: DURATION_OPTIONS,
@@ -130,6 +131,7 @@ Page({
       'form.venue': this.data.lastVenue,
       'form.partners': '',
       'form.note': '',
+      'form.media': [],
       'form.is_shared': true,
     })
   },
@@ -149,6 +151,7 @@ Page({
       'form.venue': item.venue || '',
       'form.partners': (item.partners || []).join('、'),
       'form.note': item.note || '',
+      'form.media': item.media || [],
       'form.is_shared': item.is_shared !== false,
     })
   },
@@ -222,10 +225,85 @@ Page({
     this.setData({ 'form.is_shared': !this.data.form.is_shared })
   },
 
+  // 选择图片/视频（最多9个）
+  chooseMedia() {
+    const remain = 9 - this.data.form.media.length
+    if (remain <= 0) {
+      wx.showToast({ title: '最多9个', icon: 'none' })
+      return
+    }
+    wx.chooseMedia({
+      count: remain,
+      mediaType: ['image', 'video'],
+      sourceType: ['album', 'camera'],
+      maxDuration: 15,
+      camera: 'back',
+      success: (res) => {
+        const picked = res.tempFiles.map((f) => ({
+          type: f.fileType,            // 'image' | 'video'
+          tempPath: f.tempFilePath,
+          size: f.size,
+          duration: f.duration,
+          file_id: '',                 // 上传后填充
+          uploading: true,
+        }))
+        this.setData({ 'form.media': this.data.form.media.concat(picked) })
+        // 逐个上传
+        picked.forEach((m, idx) => this.uploadOneMedia(m, idx))
+      },
+    })
+  },
+
+  async uploadOneMedia(media, idx) {
+    const app = getApp()
+    const openid = (app.globalData && app.globalData.openid) || 'user'
+    const ext = media.type === 'video' ? 'mp4' : 'jpg'
+    const cloudPath = `record_media/${openid}_${Date.now()}_${idx}.${ext}`
+    try {
+      const upRes = await wx.cloud.uploadFile({ cloudPath, filePath: media.tempPath })
+      const list = this.data.form.media
+      // 定位这条（用 tempPath 匹配，避免索引漂移）
+      const i = list.findIndex((x) => x.tempPath === media.tempPath)
+      if (i >= 0) {
+        list[i] = { ...list[i], file_id: upRes.fileID, uploading: false }
+        this.setData({ 'form.media': list })
+      }
+    } catch (e) {
+      const list = this.data.form.media
+      const i = list.findIndex((x) => x.tempPath === media.tempPath)
+      if (i >= 0) {
+        list[i] = { ...list[i], uploading: false, error: true }
+        this.setData({ 'form.media': list })
+      }
+      wx.showToast({ title: '有媒体上传失败', icon: 'none' })
+    }
+  },
+
+  removeMedia(e) {
+    const idx = e.currentTarget.dataset.idx
+    const list = this.data.form.media
+    list.splice(idx, 1)
+    this.setData({ 'form.media': list })
+  },
+
+  previewFormMedia(e) {
+    const idx = e.currentTarget.dataset.idx
+    const list = this.data.form.media
+    const sources = list.map((m) => ({
+      url: m.tempPath,
+      type: m.type,
+    }))
+    wx.previewMedia({ sources, current: idx, showmenu: true })
+  },
+
   async submit() {
     if (this.data.submitting) return
     if (!this.data.form.duration_min) {
       wx.showToast({ title: '请选择时长', icon: 'none' })
+      return
+    }
+    if (this.data.form.media.some((m) => m.uploading)) {
+      wx.showToast({ title: '媒体上传中，请稍候', icon: 'none' })
       return
     }
     this.setData({ submitting: true })
@@ -243,6 +321,9 @@ Page({
         partners,
         note: this.data.form.note,
         is_shared: this.data.form.is_shared,
+        media: this.data.form.media
+          .filter((m) => m.file_id && !m.uploading && !m.error)
+          .map((m) => ({ type: m.type, file_id: m.file_id })),
       }
       if (this.data.editingId) {
         payload.type = 'update'

@@ -1,7 +1,15 @@
 # server/pose.py — MediaPipe Pose 封装：视频 → 骨骼点序列
 import os
-import cv2
 import math
+
+# cv2 / mediapipe 延迟导入，避免服务启动即加载
+cv2 = None
+def _cv2():
+    global cv2
+    if cv2 is None:
+        import cv2 as _cv2_mod
+        cv2 = _cv2_mod
+    return cv2
 
 
 def extract_landmarks(video_path, max_frames=180):
@@ -11,7 +19,8 @@ def extract_landmarks(video_path, max_frames=180):
     - 视频抽帧到约 30fps，最多 max_frames 帧，控制耗时
     - landmarks 坐标已归一化（x,y ∈ [0,1]，z 相对深度）
     """
-    import mediapipe as mp  # 延迟导入，避免服务启动即加载
+    import mediapipe as mp  # 延迟导入
+    cv2 = _cv2()
 
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
@@ -57,6 +66,49 @@ def extract_landmarks(video_path, max_frames=180):
 
     cap.release()
     return landmarks_seq
+
+
+def detect_subject_info(landmarks_seq, side='r'):
+    """
+    计算被识别者（MediaPipe Pose 单人模式检测到的人）的位置信息。
+    返回：
+      bbox: {x_min, y_min, x_max, y_max}  归一化包围盒
+      h_position: 'left' | 'center' | 'right'  画面水平位置
+      h_position_text: 中文描述
+      main_side: 'r' | 'l'  持拍手
+      main_side_text: 中文
+    说明：MediaPipe Pose 单实例只检测画面中显著性最高的一个人，
+    若画面多人，结果对应最显著那位，需在前端标注。
+    """
+    if not landmarks_seq:
+        return None
+    xs, ys = [], []
+    for s in landmarks_seq:
+        for lm in s['landmarks']:
+            if lm['visibility'] >= 0.3:
+                xs.append(lm['x'])
+                ys.append(lm['y'])
+    if not xs:
+        return None
+    x_min, x_max = min(xs), max(xs)
+    y_min, y_max = min(ys), max(ys)
+    center_x = (x_min + x_max) / 2
+    if center_x < 0.35:
+        h_pos, h_text = 'left', '画面左侧'
+    elif center_x > 0.65:
+        h_pos, h_text = 'right', '画面右侧'
+    else:
+        h_pos, h_text = 'center', '画面中间'
+    side_text = '右手持拍' if side == 'r' else '左手持拍'
+    return {
+        'bbox': {'x_min': round(x_min, 3), 'y_min': round(y_min, 3),
+                  'x_max': round(x_max, 3), 'y_max': round(y_max, 3)},
+        'h_position': h_pos,
+        'h_position_text': h_text,
+        'main_side': side,
+        'main_side_text': side_text,
+        'note': '单人识别模式，结果为画面中最显著的人',
+    }
 
 
 def sample_skeleton_frames(landmarks_seq, k=6):
