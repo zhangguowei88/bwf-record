@@ -1,4 +1,5 @@
-[
+// 球拍种子数据（采集后自动生成，勿手动编辑）
+module.exports = [
   {
     "name": "天斧100ZZ ASTROX 100ZZ",
     "brand": "YONEX",

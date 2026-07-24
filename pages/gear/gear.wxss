@@ -104,3 +104,19 @@
 .gear-count {
   font-size: 24rpx;
 }
+
+
+/* 装备匹配入口 */
+.match-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, var(--c-primary-light), #fff);
+  margin-bottom: 20rpx;
+}
+.match-entry-left { display: flex; align-items: center; gap: 20rpx; }
+.match-entry-icon { font-size: 48rpx; }
+.match-entry-info { display: flex; flex-direction: column; gap: 4rpx; }
+.match-entry-title { font-size: 32rpx; font-weight: 600; color: var(--c-primary-dark); }
+.match-entry-desc { font-size: 24rpx; }
+.match-entry-arrow { font-size: 40rpx; color: var(--c-primary); }

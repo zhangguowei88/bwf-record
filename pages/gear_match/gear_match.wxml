@@ -1,0 +1,61 @@
+<!-- pages/gear_match/gear_match.wxml — 智能装备匹配 -->
+<view class="container safe-bottom">
+
+  <!-- 答题阶段 -->
+  <block wx:if="{{step < questions.length}}">
+    <view class="match-progress">
+      <text class="text-light">{{step + 1}} / {{questions.length}}</text>
+      <text class="match-progress-bar" style="width:{{(step + 1) * 20}}%;"></text>
+    </view>
+
+    <view class="card match-q-card">
+      <text class="match-q-title">{{questions[step].title}}</text>
+      <view class="match-options">
+        <view wx:for="{{questions[step].options}}" wx:key="value"
+          class="match-option {{answers[questions[step].key] === item.value ? 'active' : ''}}"
+          data-key="{{questions[step].key}}" data-value="{{item.value}}" bindtap="pick">
+          {{item.label}}
+        </view>
+      </view>
+    </view>
+
+    <button wx:if="{{step > 0}}" class="btn btn-ghost btn-block" bindtap="prev">上一题</button>
+  </block>
+
+  <!-- 结果阶段 -->
+  <block wx:if="{{step >= questions.length}}">
+    <view wx:if="{{loading}}" class="loading-wrap">
+      <view class="loading-spinner"></view>
+      <text class="text-light">匹配中...</text>
+    </view>
+
+    <block wx:if="{{!loading}}">
+      <view class="match-result-title">🎯 为你推荐</view>
+      <view wx:for="{{recommends}}" wx:key="_id" class="card match-gear-card"
+        data-id="{{item._id}}" bindtap="goDetail">
+        <view class="match-rank">{{index + 1}}</view>
+        <view class="match-gear-info">
+          <text class="match-gear-name">{{item.name}}</text>
+          <text class="text-light match-gear-meta">{{item.brand}} · {{item.price_text}}</text>
+          <view class="match-gear-tags">
+            <text class="match-tag">{{item.spec.u_weight}}</text>
+            <text class="match-tag" wx:if="{{item.spec.balance_point}}">{{item.spec.balance_point}}</text>
+          </view>
+        </view>
+        <text class="match-gear-score" style="color:{{item.score_color}};">★ {{item.score_text}}</text>
+      </view>
+
+      <view wx:if="{{avoids.length}}" class="match-avoid-title">⚠️ 建议避坑</view>
+      <view wx:for="{{avoids}}" wx:key="_id" class="card match-avoid-card"
+        data-id="{{item._id}}" bindtap="goDetail">
+        <view class="match-gear-info">
+          <text class="match-gear-name">{{item.name}}</text>
+          <text class="text-light match-gear-meta">{{item.brand}} · {{item.price_text}}</text>
+        </view>
+        <text class="match-avoid-tag">不太适合你</text>
+      </view>
+
+      <button class="btn btn-ghost btn-block" bindtap="restart" style="margin-top:32rpx;">重新匹配</button>
+    </block>
+  </block>
+</view>

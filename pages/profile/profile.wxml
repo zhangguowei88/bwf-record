@@ -164,6 +164,18 @@
     </block>
   </view>
 
+  <!-- 导入种子装备 -->
+  <view class="card" bindtap="goGearSeed">
+    <view class="entry-row">
+      <text class="entry-icon">📥</text>
+      <view class="entry-info">
+        <text class="entry-title">导入种子装备</text>
+        <text class="entry-desc text-light">把采集的球拍批量导入装备库</text>
+      </view>
+      <text class="entry-arrow">›</text>
+    </view>
+  </view>
+
   <!-- 打球记录入口 -->
   <view class="card" bindtap="goRecord">
     <view class="entry-row">

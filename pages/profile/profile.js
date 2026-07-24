@@ -213,6 +213,11 @@ Page({
     }
   },
 
+  /** 导入种子装备 */
+  goGearSeed() {
+    wx.navigateTo({ url: '/pages/gear_seed/gear_seed' })
+  },
+
   /** 打球记录 */
   goRecord() {
     wx.navigateTo({ url: '/pages/record/record' })

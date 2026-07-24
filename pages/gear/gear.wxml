@@ -1,6 +1,18 @@
 <!-- pages/gear/gear.wxml — 装备评测主页 -->
 <view class="container safe-bottom">
 
+  <!-- 装备匹配入口 -->
+  <view class="card match-entry" bindtap="goMatch">
+    <view class="match-entry-left">
+      <text class="match-entry-icon">🎯</text>
+      <view class="match-entry-info">
+        <text class="match-entry-title">智能装备匹配</text>
+        <text class="match-entry-desc text-light">5道题，找到最适合你的球拍</text>
+      </view>
+    </view>
+    <text class="match-entry-arrow">›</text>
+  </view>
+
   <!-- 搜索 -->
   <view class="search-bar">
     <input class="search-input" value="{{keyword}}" bindinput="onKeywordInput"

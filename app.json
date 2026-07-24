@@ -11,7 +11,9 @@
     "pages/feedback/feedback",
     "pages/gear_detail/gear_detail",
     "pages/review_edit/review_edit",
-    "pages/review_detail/review_detail"
+    "pages/review_detail/review_detail",
+    "pages/gear_seed/gear_seed",
+    "pages/gear_match/gear_match"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ffffff",

@@ -52,8 +52,122 @@ exports.main = async (event, context) => {
       return await applyGear(event, me)
     case 'my_review':
       return await myReview(event, myUserId)
+    case 'seed':
+      return await seedGear(event, me)
+    case 'seed_thirdparty':
+      return await seedThirdparty(event, me)
     default:
       return { code: -1, msg: '未知操作类型', data: null }
+  }
+}
+
+/**
+ * 批量导入第三方参考评测。按 gear_name 匹配装备。
+ * event.list: [{gear_name, source_name, source_url, data_summary, pros, cons}]
+ * 每装备仅保留1条第三方（重复则更新）。
+ */
+async function seedThirdparty(event, me) {
+  if (!me) return { code: -1, msg: '用户不存在', data: null }
+  const list = Array.isArray(event.list) ? event.list : []
+  if (!list.length) return { code: -1, msg: '无数据', data: null }
+  let inserted = 0, skipped = 0, notfound = 0
+  for (const item of list) {
+    try {
+      const gRes = await db.collection('gear')
+        .where({ name: db.Regexp({ regexp: String(item.gear_name || '').trim(), options: 'i' }) })
+        .limit(1).get()
+      if (!gRes.data.length) { notfound++; continue }
+      const g = gRes.data[0]
+      // 查是否已有第三方
+      const ex = await db.collection('gear_review')
+        .where({ gear_id: g._id, source: 'thirdparty', source_name: item.source_name })
+        .limit(1).get()
+      if (ex.data.length) {
+        await db.collection('gear_review').doc(ex.data[0]._id).update({
+          data: {
+            source_url: String(item.source_url || '').slice(0, 300),
+            data_summary: String(item.data_summary || '').slice(0, 1000),
+            pros: String(item.pros || '').slice(0, 500),
+            cons: String(item.cons || '').slice(0, 500),
+            updated_at: db.serverDate(),
+          },
+        })
+        skipped++
+      } else {
+        await db.collection('gear_review').add({
+          data: {
+            gear_id: g._id, gear_name: g.name, category: g.category,
+            user_id: me._id, author: { nick_name: '第三方参考' },
+            source: 'thirdparty',
+            source_name: String(item.source_name || '').slice(0, 60),
+            source_url: String(item.source_url || '').slice(0, 300),
+            data_summary: String(item.data_summary || '').slice(0, 1000),
+            pros: String(item.pros || '').slice(0, 500),
+            cons: String(item.cons || '').slice(0, 500),
+            dimensions: {}, score: 0, status: 'normal',
+            created_at: db.serverDate(), updated_at: db.serverDate(),
+          },
+        })
+        inserted++
+      }
+    } catch (e) { notfound++ }
+  }
+  return { code: 0, msg: 'success', data: { inserted, skipped, notfound, total: list.length } }
+}
+
+/**
+ * 批量导入装备（采集后自动入库）。
+ * event.gears: [{name,brand,category,tier,spec,price_low,price_high,injury_tags,...}]
+ * 按 name 去重：已存在的跳过，不重复录入。
+ * 仅登录用户可触发（管理员可在 user_profile 加 is_admin 限制，这里宽松处理便于自用）。
+ */
+async function seedGear(event, me) {
+  if (!me) return { code: -1, msg: '用户不存在', data: null }
+  const gears = Array.isArray(event.gears) ? event.gears : []
+  if (!gears.length) return { code: -1, msg: '无数据', data: null }
+
+  let inserted = 0
+  let skipped = 0
+  const errors = []
+  for (const g of gears) {
+    try {
+      // 按名称去重
+      const dup = await db.collection('gear')
+        .where({ name: g.name })
+        .limit(1).get()
+      if (dup.data && dup.data.length) {
+        skipped++
+        continue
+      }
+      await db.collection('gear').add({
+        data: {
+          name: String(g.name || '').slice(0, 60),
+          brand: String(g.brand || '').slice(0, 30),
+          category: g.category || 'racket',
+          tier: g.tier || '',
+          spec: g.spec || {},
+          price_low: Number(g.price_low) || 0,
+          price_high: Number(g.price_high) || 0,
+          injury_tags: Array.isArray(g.injury_tags) ? g.injury_tags : [],
+          cover_file_id: g.cover_file_id || '',
+          status: 'approved',
+          review_count: 0,
+          avg_score: 0,
+          official_score: 0,
+          official_review_id: '',
+          data_source: g.data_source || '批量导入',
+          created_at: db.serverDate(),
+          updated_at: db.serverDate(),
+        },
+      })
+      inserted++
+    } catch (e) {
+      errors.push({ name: g.name, err: e.message })
+    }
+  }
+  return {
+    code: 0, msg: 'success',
+    data: { inserted, skipped, errors, total: gears.length },
   }
 }
 

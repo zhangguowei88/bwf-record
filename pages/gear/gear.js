@@ -77,4 +77,8 @@ Page({
     const id = e.currentTarget.dataset.id
     wx.navigateTo({ url: `/pages/gear_detail/gear_detail?gear_id=${id}` })
   },
+
+  goMatch() {
+    wx.navigateTo({ url: '/pages/gear_match/gear_match' })
+  },
 })

@@ -1,0 +1,45 @@
+<!-- pages/gear_seed/gear_seed.wxml — 导入种子装备 + 第三方参考 -->
+<view class="container safe-bottom">
+
+  <!-- 种子装备 -->
+  <view class="card">
+    <view class="card-title"><text>种子装备（{{list.length}} 款）</text></view>
+    <view wx:for="{{list}}" wx:key="name" class="seed-item">
+      <view class="seed-left">
+        <text class="seed-name">{{item.name}}</text>
+        <text class="seed-meta text-light">{{item.brand}} · {{item.tier}} · ¥{{item.price_low}}-{{item.price_high}}</text>
+      </view>
+      <text class="seed-spec text-light">{{item.spec.u_weight}} · {{item.spec.balance_point}}</text>
+    </view>
+  </view>
+
+  <button class="btn btn-primary btn-block" bindtap="importAll"
+    loading="{{importing}}" disabled="{{importing}}">一键导入装备库</button>
+
+  <view class="card" wx:if="{{result}}">
+    <view class="card-title"><text>导入结果</text></view>
+    <text class="seed-result">新增：{{result.inserted}} 条\n跳过：{{result.skipped}} 条\n总计：{{result.total}} 条</text>
+  </view>
+
+  <!-- 第三方参考 -->
+  <view class="card" style="margin-top:32rpx;">
+    <view class="card-title"><text>第三方参考评测（{{tpList.length}} 条）</text></view>
+    <view wx:if="{{!tpList.length}}" class="empty-text text-light">暂无数据，采集后导入</view>
+    <view wx:for="{{tpList}}" wx:key="gear_name" class="seed-item">
+      <view class="seed-left">
+        <text class="seed-name">{{item.gear_name}}</text>
+        <text class="seed-meta text-light">{{item.source_name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <button class="btn btn-ghost btn-block" bindtap="importThirdparty"
+    loading="{{tpImporting}}" disabled="{{tpImporting || !tpList.length}}">导入第三方参考</button>
+
+  <view class="card" wx:if="{{tpResult}}">
+    <view class="card-title"><text>第三方导入结果</text></view>
+    <text class="seed-result">新增：{{tpResult.inserted}} 条\n更新：{{tpResult.skipped}} 条\n未匹配：{{tpResult.notfound}} 条</text>
+  </view>
+
+  <text class="tip text-light">说明：按装备名称去重。第三方参考仅展示客观数据+来源，不计入综合分。</text>
+</view>
